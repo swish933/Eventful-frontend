@@ -1,6 +1,6 @@
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "./ModeToggle";
+import { ModeToggle } from "./mode-toggle";
 import Link from "next/link";
 
 type IconProps = {
@@ -9,7 +9,7 @@ type IconProps = {
 
 export default function Component() {
 	return (
-		<header className='flex h-20 border-b border-b-muted w-full shrink-0 items-center px-4 md:px-6'>
+		<header className='flex h-20 border-b w-full shrink-0 items-center px-4 md:px-6'>
 			<Sheet>
 				<SheetTrigger asChild className='bg-background dark:bg-background'>
 					<Button
