@@ -1,16 +1,15 @@
-// import Image from "next/image";
-// import Link from "next/link";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navbar";
+import Hero from "@/components/hero";
+import Footer from "@/components/footer";
 
 export default function Home() {
 	return (
 		<>
 			<Navbar />
 			<main>
-				{/* <Hero /> */}
-				{/* <Testimonial /> */}
+				<Hero text='Organize and attend events with ease' />
 			</main>
-			{/* <Footer/> */}
+			<Footer />
 		</>
 	);
 }

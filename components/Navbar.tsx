@@ -2,6 +2,7 @@ import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./mode-toggle";
 import Link from "next/link";
+import { grandstander } from "@/app/fonts";
 
 type IconProps = {
 	className?: string;
@@ -9,7 +10,9 @@ type IconProps = {
 
 export default function Component() {
 	return (
-		<header className='flex h-20 border-b w-full shrink-0 items-center px-4 md:px-6'>
+		<header
+			className={`flex sticky top-0 bg-background dark:bg-background text-foreground h-20 border-b w-full shrink-0 items-center px-4 md:px-6 ${grandstander.className}`}
+		>
 			<Sheet>
 				<SheetTrigger asChild className='bg-background dark:bg-background'>
 					<Button
@@ -22,14 +25,9 @@ export default function Component() {
 					</Button>
 				</SheetTrigger>
 				<SheetContent
-					side='left'
-					className='bg-popover dark:bg-popover border-border dark:border-border text-foreground dark:text-foreground'
+					side='right'
+					className={`${grandstander.className} bg-popover dark:bg-popover border-border dark:border-border text-foreground dark:text-foreground`}
 				>
-					<Link href='#' className='mr-6 hidden lg:flex' prefetch={false}>
-						<p>Eventful</p>
-						<MountainIcon className='h-6 w-6' />
-						<span className='sr-only'>Eventful</span>
-					</Link>
 					<div className='grid gap-2 py-6'>
 						<Link
 							href='/events'
@@ -63,8 +61,7 @@ export default function Component() {
 				</SheetContent>
 			</Sheet>
 			<Link href='/' className='mr-6 hidden lg:flex' prefetch={false}>
-				<MountainIcon className='h-6 w-6' />
-				<span className='sr-only'>Acme Inc</span>
+				<p className='text-3xl font-semibold'>Eventful</p>
 			</Link>
 			<nav className='ml-auto hidden lg:flex gap-6'>
 				<Link
