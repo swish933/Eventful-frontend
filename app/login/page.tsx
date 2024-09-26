@@ -1,6 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { AxiosError } from "axios";
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -18,75 +25,89 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { ModeToggle } from "@/components/mode-toggle";
+import { axiosInstance } from "@/lib/axios";
 
 const formSchema = z.object({
-	email: z.string().email(),
-	password: z.string().min(6, { message: "Must be 6 or more characters long" }),
+	user: z.string(),
+	password: z.string(),
 });
 
 export default function LoginForm() {
+	const router = useRouter();
+	const searchParams = useSearchParams();
+
+	useEffect(() => {
+		const from = searchParams.get("from");
+		if (from) {
+			toast.success("Registration successful!");
+		}
+	}, [searchParams]);
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			email: "",
+			user: "",
 			password: "",
 		},
 	});
 
 	async function onSubmit(userCredentials: z.infer<typeof formSchema>) {
 		try {
-			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_API_URL}/api/auth`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					mode: "cors",
-					body: JSON.stringify(userCredentials),
-				}
-			);
+			const data = JSON.stringify(userCredentials);
 
-			const data = await response.json();
+			const response = await axiosInstance.post("/api/v1/auth/login", data, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
 
-			console.log(data);
-		} catch (error: unknown) {
-			if (error instanceof Error) {
-				console.log(error.message);
+			const { token } = response.data;
+
+			localStorage.setItem("token", token);
+
+			if (searchParams.get("from")) {
+				router.replace("/events");
 			} else {
-				console.error(error);
+				router.push("/events");
+			}
+		} catch (error: unknown) {
+			if (error instanceof AxiosError && error.response) {
+				toast.error(error.response.data.message);
+			} else if (error instanceof Error) {
+				console.error(error.message);
 			}
 		}
 	}
 
 	return (
 		<main className='min-h-screen grid place-items-center'>
+			<div className='justify-self-end mr-4 fixed top-4 right-4'>
+				<ModeToggle />
+			</div>
+
 			<Card className='mx-auto max-w-sm w-full bg-card dark:bg-card text-foreground dark:text-foreground border-border dark:border-border'>
 				<CardHeader>
 					<CardTitle className='text-2xl'>Login</CardTitle>
 					<CardDescription>
-						Enter your email below to login to your account
+						Enter your username or email below to login to your account
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+						<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
 							<FormField
 								control={form.control}
-								name='email'
+								name='user'
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel htmlFor='email'>Email</FormLabel>
+										<FormLabel htmlFor='user'>Email or Username</FormLabel>
 										<FormControl>
 											<Input
-												id='email'
-												type='email'
+												id='user'
+												type='text'
 												placeholder='m@example.com'
 												required
-												autoComplete='email'
 												className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
 												{...field}
 											/>

@@ -3,6 +3,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import ReactQueryProvider from "@/lib/providers/ReactQueryProvider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
 	title: "Eventful",
@@ -23,7 +24,10 @@ export default function RootLayout({
 				)}
 			>
 				<ThemeProvider attribute='class' defaultTheme='dark'>
-					<ReactQueryProvider>{children}</ReactQueryProvider>
+					<ReactQueryProvider>
+						{children}
+						<Toaster position='top-right' richColors />
+					</ReactQueryProvider>
 				</ThemeProvider>
 			</body>
 		</html>

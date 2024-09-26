@@ -1,5 +1,14 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { isValidPhoneNumber } from "react-phone-number-input";
+import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import Link from "next/link";
+import { ModeToggle } from "@/components/mode-toggle";
+import { PhoneInput } from "@/components/phone-input";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -17,13 +26,17 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import Link from "next/link";
-import "../globals.css";
+import { axiosInstance } from "@/lib/axios";
+
+const MAX_FILE_SIZE = 5_000_000;
+const ACCEPTED_IMAGE_TYPES = [
+	"image/jpg",
+	"image/jpeg",
+	"image/png",
+	"image/webp",
+];
 
 const formSchema = z
 	.object({
@@ -34,157 +47,281 @@ const formSchema = z
 		password: z
 			.string()
 			.min(6, { message: "Must be 6 or more characters long" }),
-		confirm_password: z
+		confirmPassword: z
 			.string()
 			.min(6, { message: "Must be 6 or more characters long" }),
+		phoneNumber: z
+			.string()
+			.refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+		role: z.enum(["attendee", "organizer"], {
+			required_error: "You need to select a user type.",
+		}),
+		avatar: z
+			.any()
+			.optional()
+			.refine(
+				(file) =>
+					file.length == 1
+						? ACCEPTED_IMAGE_TYPES.includes(file[0]?.type)
+							? true
+							: false
+						: true,
+				".jpg, .jpeg, .png and .webp files are accepted."
+			)
+			.refine(
+				(file) =>
+					file.length == 1
+						? file[0]?.size <= MAX_FILE_SIZE
+							? true
+							: false
+						: true,
+				`Max file size is 5MB.`
+			),
 	})
-	.refine((data) => data.password === data.confirm_password, {
+	.refine((data) => data.password === data.confirmPassword, {
 		message: "Passwords don't match",
-		path: ["confirm_password"],
+		path: ["confirmPassword"],
 	});
 
 export default function RegisterForm() {
+	const router = useRouter();
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			email: "",
 			username: "",
 			password: "",
-			confirm_password: "",
+			confirmPassword: "",
+			phoneNumber: "",
+			avatar: undefined,
+			role: "attendee",
 		},
 	});
 
+	const fileRef = form.register("avatar", { required: true });
+
 	async function onSubmit(userCredentials: z.infer<typeof formSchema>) {
-		console.log(userCredentials);
-
 		try {
-			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_API_URL}/api/user`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					mode: "cors",
-					body: JSON.stringify(userCredentials),
-				}
-			);
+			const formData = new FormData();
+			const {
+				email,
+				username,
+				password,
+				confirmPassword,
+				phoneNumber,
+				avatar,
+				role,
+			} = userCredentials;
 
-			const data = await response.json();
+			formData.append("email", email);
+			formData.append("username", username);
+			formData.append("password", password);
+			formData.append("confirmPassword", confirmPassword);
+			formData.append("phoneNumber", phoneNumber);
+			formData.append("role", role);
+			formData.append("avatar", avatar[0]);
 
-			console.log(data);
+			await axiosInstance.post(`/api/v1/users`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
+
+			router.push("/login?from=registration");
 		} catch (error: unknown) {
-			if (error instanceof Error) {
-				console.log(error.message);
-			} else {
-				console.error(error);
+			if (error instanceof AxiosError && error.response) {
+				console.log(error.response.data);
+				// toast
+			} else if (error instanceof Error) {
+				console.error(error.message);
 			}
 		}
 	}
 
 	return (
-		<main className='min-h-screen grid place-items-center bg-background text-foreground'>
-			<Card className='mx-auto max-w-sm w-full bg-card dark:bg-card text-card-foreground border-border dark:border-border border-2'>
+		<main className='min-h-screen grid place-items-center'>
+			<div className='justify-self-end mr-4 fixed top-4 right-4'>
+				<ModeToggle />
+			</div>
+			<Card className='mx-auto max-w-md my-10 w-full bg-card dark:bg-card text-card-foreground border-border dark:border-border border-2'>
 				<CardHeader>
 					<CardTitle className='text-2xl'>Register</CardTitle>
-					<CardDescription>Enter your email below to register.</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+						<form onSubmit={form.handleSubmit(onSubmit)}>
+							<div className='grid grid-cols-2 gap-4'>
+								<FormField
+									control={form.control}
+									name='email'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel htmlFor='email'>Email</FormLabel>
+											<FormControl>
+												<Input
+													id='email'
+													type='email'
+													placeholder='m@example.com'
+													required
+													autoComplete='email'
+													className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name='username'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel htmlFor='username'>Username</FormLabel>
+											<FormControl>
+												<Input
+													id='username'
+													placeholder='john_doe123'
+													required
+													className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name='password'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel htmlFor='password'>Password</FormLabel>
+											<FormControl>
+												<Input
+													id='password'
+													type='password'
+													required
+													autoComplete='current-password'
+													className='bg-background dark:bg-background  border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name='confirmPassword'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel htmlFor='confirmPassword'>
+												Confirm Password
+											</FormLabel>
+											<FormControl>
+												<Input
+													id='confirmPassword'
+													type='password'
+													required
+													autoComplete='current-password'
+													className='bg-background dark:bg-background  border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name='phoneNumber'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel htmlFor='phoneNumber'>Phone number</FormLabel>
+											<FormControl>
+												<PhoneInput
+													defaultCountry='NG'
+													international
+													className='bg-background dark:bg-background  border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
+													placeholder='Enter a phone number'
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name='avatar'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel htmlFor='avatar'>Avatar</FormLabel>
+											<FormControl>
+												<Input
+													id='avatar'
+													type='file'
+													accept='image/*'
+													className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
+													{...fileRef}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
 							<FormField
 								control={form.control}
-								name='email'
+								name='role'
 								render={({ field }) => (
-									<FormItem>
-										<FormLabel htmlFor='email'>Email</FormLabel>
+									<FormItem className='space-y-3 mt-4 mb-6'>
+										<FormLabel>User type</FormLabel>
 										<FormControl>
-											<Input
-												id='email'
-												type='email'
-												placeholder='m@example.com'
-												required
-												autoComplete='email'
-												className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
-												{...field}
-											/>
+											<RadioGroup
+												onValueChange={field.onChange}
+												defaultValue={field.value}
+												className='flex space-x-1'
+											>
+												<FormItem className='flex items-center space-x-3 space-y-0'>
+													<FormControl>
+														<RadioGroupItem
+															value='attendee'
+															className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring text-primary dark:text-primary'
+														/>
+													</FormControl>
+													<FormLabel className='font-normal'>
+														Attendee
+													</FormLabel>
+												</FormItem>
+												<FormItem className='flex items-center space-x-3 space-y-0'>
+													<FormControl>
+														<RadioGroupItem
+															value='organizer'
+															className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring text-primary dark:text-primary'
+														/>
+													</FormControl>
+													<FormLabel className='font-normal'>
+														Organizer
+													</FormLabel>
+												</FormItem>
+											</RadioGroup>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
-
-							<FormField
-								control={form.control}
-								name='username'
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel htmlFor='username'>Username</FormLabel>
-										<FormControl>
-											<Input
-												id='username'
-												placeholder='john_doe123'
-												required
-												className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								control={form.control}
-								name='password'
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel htmlFor='password'>Password</FormLabel>
-										<FormControl>
-											<Input
-												id='password'
-												type='password'
-												required
-												autoComplete='current-password'
-												className='bg-background dark:bg-background  border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								control={form.control}
-								name='confirm_password'
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel htmlFor='confirm_password'>
-											Confirm Password
-										</FormLabel>
-										<FormControl>
-											<Input
-												id='confirm_password'
-												type='password'
-												required
-												autoComplete='current-password'
-												className='bg-background dark:bg-background  border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<Button
-								disabled={form.formState.isSubmitting}
-								type='submit'
-								className='w-full bg-primary dark:bg-primary text-primary-foreground dark:text-primary-foreground hover:bg-primary/75 dark:hover:bg-primary/75 focus-visible:ring-ring dark:focus-visible:ring-ring'
-							>
-								Sign up
-							</Button>
+							<div className='mx-auto max-w-sm'>
+								<Button
+									disabled={form.formState.isSubmitting}
+									type='submit'
+									className='w-full bg-primary dark:bg-primary text-primary-foreground dark:text-primary-foreground hover:bg-primary/75 dark:hover:bg-primary/75 focus-visible:ring-ring dark:focus-visible:ring-ring'
+								>
+									Sign up
+								</Button>
+							</div>
 						</form>
 					</Form>
 				</CardContent>
