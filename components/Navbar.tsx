@@ -11,7 +11,7 @@ type IconProps = {
 export default function Component() {
 	return (
 		<header
-			className={`flex sticky top-0 bg-background dark:bg-background text-foreground h-20 border-b w-full shrink-0 items-center px-4 md:px-6 ${grandstander.className}`}
+			className={`flex sticky top-0 bg-background dark:bg-background text-foreground h-20 border-b w-full shrink-0 items-center px-4 md:px-6`}
 		>
 			<Sheet>
 				<SheetTrigger asChild className='bg-background dark:bg-background'>
@@ -26,7 +26,7 @@ export default function Component() {
 				</SheetTrigger>
 				<SheetContent
 					side='right'
-					className={`${grandstander.className} bg-popover dark:bg-popover border-border dark:border-border text-foreground dark:text-foreground`}
+					className='bg-popover dark:bg-popover border-border dark:border-border text-foreground dark:text-foreground'
 				>
 					<div className='grid gap-2 py-6'>
 						<Link
@@ -61,7 +61,9 @@ export default function Component() {
 				</SheetContent>
 			</Sheet>
 			<Link href='/' className='mr-6 hidden lg:flex' prefetch={false}>
-				<p className='text-3xl font-semibold'>Eventful</p>
+				<p className={`text-3xl font-semibold ${grandstander.className}`}>
+					Eventful
+				</p>
 			</Link>
 			<nav className='ml-auto hidden lg:flex gap-6'>
 				<Link
