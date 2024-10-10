@@ -17,14 +17,14 @@ export default function Hero({ text }: Props) {
 				<h1 className='text-center lg:text-left text-[clamp(4rem,6vw,6rem)] leading-tight'>
 					{text}
 				</h1>
-				<Link href='/signup' className='lg:place-self-start flex'>
+				<Link href='/signup' className='lg:place-self-start font-sans flex'>
 					<Button className='bg-primary dark:bg-primary hover:bg-primary/90 '>
 						Create an account
 					</Button>
 				</Link>
 			</div>
 
-			<Image src={heroImg} alt='women in native attire' />
+			<Image src={heroImg} priority={true} alt='women in native attire' />
 		</div>
 	);
 }

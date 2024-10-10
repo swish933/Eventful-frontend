@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import ReactQueryProvider from "@/lib/providers/ReactQueryProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import UserProvider from "@/context/UserContext";
+import AuthProvider from "@/context/AuthContext";
 
 export const metadata: Metadata = {
 	title: "Eventful",
@@ -23,12 +24,14 @@ export default function RootLayout({
 					`font-sans`
 				)}
 			>
-				<ThemeProvider attribute='class' defaultTheme='dark'>
-					<ReactQueryProvider>
-						{children}
-						<Toaster position='top-right' richColors />
-					</ReactQueryProvider>
-				</ThemeProvider>
+				<AuthProvider>
+					<UserProvider>
+						<ThemeProvider attribute='class' defaultTheme='dark'>
+							{children}
+							<Toaster position='top-right' richColors />
+						</ThemeProvider>
+					</UserProvider>
+				</AuthProvider>
 			</body>
 		</html>
 	);

@@ -4,4 +4,5 @@ export const grandstander = Grandstander({
 	weight: "variable",
 	style: ["normal"],
 	subsets: ["latin"],
+	display: "swap",
 });
