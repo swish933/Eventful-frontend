@@ -44,43 +44,56 @@ import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { useRef } from "react";
 
-const formSchema = z.object({
-	name: z.string(),
-	description: z
-		.string()
-		.max(300, { message: "Must be less than 300 characters" }),
-	price: z.coerce.number().min(0, { message: "Price cannot be less than 0" }),
-	location: z
-		.string()
-		.max(250, { message: "Must be less than 250 characters" }),
-	startsAt: z.date(),
-	endsAt: z.date(),
-	reminderTime: z.date(),
-	eventType: z.enum(["physical", "remote"], {
-		required_error: "Please select an event type.",
-	}),
-	images: z
-		.instanceof(FileList)
-		.transform((files) => Array.from(files))
-		.refine(
-			(images: File[]) =>
-				images.length > 1
-					? images.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type))
-					: false,
-			"Only .jpg, .jpeg, .png and .webp files are accepted"
-		)
-		.refine((images: File[]) => {
-			if (images.length > 1) {
-				let size = 0;
-				images.forEach((image) => {
-					size += image.size;
-				});
-				return size <= MAX_MULTIFILES_SIZE;
-			} else {
-				return false;
-			}
-		}, "Max size is 15MB."),
-});
+const formSchema = z
+	.object({
+		name: z.string(),
+		description: z
+			.string()
+			.max(300, { message: "Must be less than 300 characters" }),
+		price: z.coerce.number().min(0, { message: "Price cannot be less than 0" }),
+		location: z
+			.string()
+			.max(250, { message: "Must be less than 250 characters" }),
+		startsAt: z.date().min(new Date(), {
+			message: "The Start date/time cannot be earlier now",
+		}),
+		endsAt: z.date(),
+		reminderTime: z.date(),
+		eventType: z.enum(["physical", "remote"], {
+			required_error: "Please select an event type.",
+		}),
+		images: z
+			.instanceof(FileList)
+			.transform((files) => Array.from(files))
+			.refine(
+				(images: File[]) =>
+					images.length > 1
+						? images.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type))
+						: false,
+				"Only .jpg, .jpeg, .png and .webp files are accepted"
+			)
+			.refine((images: File[]) => {
+				if (images.length > 1) {
+					let size = 0;
+					images.forEach((image) => {
+						size += image.size;
+					});
+					return size <= MAX_MULTIFILES_SIZE;
+				} else {
+					return false;
+				}
+			}, "Max size is 15MB."),
+	})
+	.refine((data) => data.endsAt > data.startsAt, {
+		message:
+			"The End date/time must be later than the scheduled Start date/time",
+		path: ["endsAt"],
+	})
+	.refine((data) => data.reminderTime < data.startsAt, {
+		message:
+			"The Reminder has to be earlier than the scheduled Start date/time",
+		path: ["reminderTime"],
+	});
 
 export default function CreateEventDialog() {
 	const ref = useRef<HTMLButtonElement>(null);
@@ -134,6 +147,7 @@ export default function CreateEventDialog() {
 				formData,
 				{
 					headers: {
+						Authorization: localStorage.getItem("token"),
 						"Content-Type": "multipart/form-data",
 					},
 				}
@@ -145,9 +159,9 @@ export default function CreateEventDialog() {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError && error.response) {
 				console.log(error.response.data);
-				toast.error(error.response.data.message, TOAST_DURATION);
+				toast.error("Something went wrong", TOAST_DURATION);
 			} else if (error instanceof Error) {
-				console.error(error);
+				console.error(error.message);
 			}
 		}
 	}

@@ -252,6 +252,7 @@ export default function RegisterForm() {
 												<PhoneInput
 													defaultCountry='NG'
 													international
+													id='phoneNumber'
 													className='bg-background dark:bg-background  border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
 													placeholder='Enter a phone number'
 													{...field}
@@ -285,32 +286,41 @@ export default function RegisterForm() {
 								name='role'
 								render={({ field }) => (
 									<FormItem className='space-y-3 mt-4 mb-6'>
-										<FormLabel>User type</FormLabel>
+										<FormLabel htmlFor='rgroup'>User type</FormLabel>
 										<FormControl>
 											<RadioGroup
 												onValueChange={field.onChange}
 												defaultValue={field.value}
 												className='flex space-x-1'
+												id='rgroup'
 											>
 												<FormItem className='flex items-center space-x-3 space-y-0'>
 													<FormControl>
 														<RadioGroupItem
+															id='attendeer1'
 															value='attendee'
 															className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring text-primary dark:text-primary'
 														/>
 													</FormControl>
-													<FormLabel className='font-normal'>
+													<FormLabel
+														htmlFor='attendeer1'
+														className='font-normal'
+													>
 														Attendee
 													</FormLabel>
 												</FormItem>
 												<FormItem className='flex items-center space-x-3 space-y-0'>
 													<FormControl>
 														<RadioGroupItem
+															id='organizerr2'
 															value='organizer'
 															className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring text-primary dark:text-primary'
 														/>
 													</FormControl>
-													<FormLabel className='font-normal'>
+													<FormLabel
+														htmlFor='organizerr2'
+														className='font-normal'
+													>
 														Organizer
 													</FormLabel>
 												</FormItem>
