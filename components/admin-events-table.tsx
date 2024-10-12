@@ -38,7 +38,9 @@ export default function EventsTable({ username }: Props) {
 
 	return (
 		<main className='grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8'>
-			<h2>Welcome, @{username}</h2>
+			<h2>
+				Welcome, <span className='font-bold'>@{username}</span>
+			</h2>
 			<div className='flex items-center'>
 				<div className='ml-auto flex items-center gap-2'>
 					<Button
