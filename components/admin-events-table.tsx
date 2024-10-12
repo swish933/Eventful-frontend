@@ -28,7 +28,6 @@ import { format } from "date-fns";
 import CreateEventDialogBtn from "@/components/create-event-dialog";
 import { useEvents } from "@/lib/hooks/events";
 import { IEvent } from "@/@types/types";
-import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
 	username: string | undefined;
