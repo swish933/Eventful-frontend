@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_URL,
-	timeout: 1000,
+	timeout: 10000,
 	headers: {
 		"Content-Type": "application/json",
 		accept: "application/json",
@@ -22,5 +22,15 @@ axiosInstance.interceptors.request.use(
 		return Promise.reject(error);
 	}
 );
+
+export const fetcher = (url: string) => {
+	return axiosInstance.get(url).then((res) => {
+		if (!res.data) {
+			throw Error(res.data.message);
+		}
+
+		return res.data;
+	});
+};
 
 export { axiosInstance };

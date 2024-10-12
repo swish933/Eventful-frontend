@@ -43,6 +43,7 @@ import { TimePicker } from "@/components/time-picker";
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { useRef } from "react";
+import { useSWRConfig } from "swr";
 
 const formSchema = z
 	.object({
@@ -55,10 +56,12 @@ const formSchema = z
 			.string()
 			.max(250, { message: "Must be less than 250 characters" }),
 		startsAt: z.date().min(new Date(), {
-			message: "The Start date/time cannot be earlier now",
+			message: "The Start date/time cannot be earlier than now",
 		}),
 		endsAt: z.date(),
-		reminderTime: z.date(),
+		reminderTime: z.date().min(new Date(), {
+			message: "The Reminder date/time cannot be earlier than now",
+		}),
 		eventType: z.enum(["physical", "remote"], {
 			required_error: "Please select an event type.",
 		}),
@@ -111,6 +114,7 @@ export default function CreateEventDialog() {
 			images: undefined,
 		},
 	});
+	const { mutate } = useSWRConfig();
 
 	const fileRef = form.register("images", { required: true });
 
@@ -147,7 +151,6 @@ export default function CreateEventDialog() {
 				formData,
 				{
 					headers: {
-						Authorization: localStorage.getItem("token"),
 						"Content-Type": "multipart/form-data",
 					},
 				}
@@ -156,6 +159,8 @@ export default function CreateEventDialog() {
 			ref.current?.click();
 			toast.success(response.data.message, TOAST_DURATION);
 			form.reset();
+
+			mutate("/api/v1/events/myevents");
 		} catch (error: unknown) {
 			if (error instanceof AxiosError && error.response) {
 				console.log(error.response.data);
@@ -171,7 +176,7 @@ export default function CreateEventDialog() {
 			<DialogTrigger ref={ref} asChild>
 				<Button
 					size='sm'
-					className='h-7 gap-1 bg-primary dark:bg-primary hover:bg-primary/50 dark:hover:bg-primary/50 text-primary-foreground dark:text-primary-foreground'
+					className='h-7 gap-1 bg-primary dark:bg-primary hover:bg-primary/50 dark:hover:bg-primary/50 text-primary-foreground dark:text-primary-foreground ring-ring dark:ring-ring'
 				>
 					<>
 						<CalendarPlus className='h-3.5 w-3.5' />

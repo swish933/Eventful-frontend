@@ -10,6 +10,7 @@ import {
 	ApiResponse,
 } from "@/@types/types";
 import { useRouter } from "next/navigation";
+import { axiosInstance } from "@/lib/axios";
 
 export default function Layout({
 	user,
@@ -33,20 +34,9 @@ export default function Layout({
 
 	useLayoutEffect(() => {
 		async function fetchUser() {
-			let response = await fetch(
-				`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
-				{
-					headers: {
-						Authorization: localStorage.getItem("token")
-							? `Bearer ${localStorage.getItem("token")}`
-							: ``,
-					},
-				}
-			);
-			if (!response.ok) {
-				console.log(response.status);
-			}
-			let userDetails: ApiResponse<IUser> = await response.json();
+			let response = await axiosInstance.get(`/api/v1/users`);
+
+			let userDetails: ApiResponse<IUser> = response.data;
 
 			updateUser(userDetails.payload);
 		}

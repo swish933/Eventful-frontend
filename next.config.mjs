@@ -5,8 +5,13 @@ const nextConfig = {
 			{
 				protocol: "https",
 				hostname: "**.cloudinary.com",
-				port: "",
 				pathname: "**",
+			},
+			{
+				protocol: "https",
+				hostname: "placehold.co",
+				pathname: "/64x64/webp",
+				search: "?font=raleway",
 			},
 		],
 	},
