@@ -34,7 +34,7 @@ type Props = {
 };
 
 export default function EventsTable({ username }: Props) {
-	const { data, isLoading } = useEvents();
+	const { data } = useEvents();
 
 	return (
 		<main className='grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8'>

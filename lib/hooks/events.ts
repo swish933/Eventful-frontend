@@ -7,3 +7,10 @@ export const useEvents = () => {
 
 	return { data: data?.payload || [], error, isLoading };
 };
+
+export const useAllEvents = () => {
+	const pathKey = `/api/v1/events/`;
+	const { data, error, isLoading } = useSWR(pathKey, fetcher);
+
+	return { data: data?.payload || [], error, isLoading };
+};

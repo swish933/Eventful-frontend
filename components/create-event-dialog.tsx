@@ -66,7 +66,7 @@ const formSchema = z
 			required_error: "Please select an event type.",
 		}),
 		images: z
-			.instanceof(FileList)
+			.instanceof(globalThis.FileList)
 			.transform((files) => Array.from(files))
 			.refine(
 				(images: File[]) =>

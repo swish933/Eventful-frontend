@@ -143,7 +143,7 @@ export default function RegisterForm() {
 	return (
 		<main className='min-h-screen grid place-items-center'>
 			<div className='justify-self-end ml-4 fixed top-4 left-4'>
-				<Link href='/' className='mr-6 hidden lg:flex' prefetch={false}>
+				<Link href='/' className='mr-6 flex' prefetch={false}>
 					<p className={`text-3xl font-semibold ${grandstander.className}`}>
 						Eventful
 					</p>
