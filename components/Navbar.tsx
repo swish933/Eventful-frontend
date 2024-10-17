@@ -2,7 +2,7 @@ import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./mode-toggle";
 import Link from "next/link";
-import { grandstander } from "@/app/fonts";
+import { grandstander, rubik } from "@/app/fonts";
 
 type IconProps = {
 	className?: string;
@@ -11,7 +11,7 @@ type IconProps = {
 export default function Component() {
 	return (
 		<header
-			className={`flex sticky top-0 bg-background dark:bg-background text-foreground h-20 border-b w-full shrink-0 items-center px-4 md:px-6`}
+			className={`flex sticky top-0 bg-transparent text-foreground h-20 border-b w-full shrink-0 items-center px-4 md:px-6 ${rubik.className}bg-cover z-50 backdrop-blur`}
 		>
 			<Sheet>
 				<SheetTrigger asChild className='bg-background dark:bg-background'>
@@ -65,31 +65,31 @@ export default function Component() {
 					Eventful
 				</p>
 			</Link>
-			<nav className='ml-auto hidden lg:flex gap-6'>
+			<nav className={`${rubik.className} ml-auto hidden lg:flex gap-6 `}>
 				<Link
 					href='/events'
-					className='text-muted-foreground hover:text-foreground rounded-radius p-2'
+					className='text-foreground hover:text-muted-foreground rounded-radius p-2'
 					prefetch={false}
 				>
 					Find events
 				</Link>
 				<Link
 					href='/create-events'
-					className='text-muted-foreground hover:text-foreground rounded-radius p-2'
+					className='text-foreground hover:text-muted-foreground rounded-radius p-2'
 					prefetch={false}
 				>
 					Create events
 				</Link>
 				<Link
 					href='/login'
-					className='text-muted-foreground hover:text-foreground rounded-radius p-2'
+					className='text-foreground hover:text-muted-foreground rounded-radius p-2'
 					prefetch={false}
 				>
 					Login
 				</Link>
 				<Link
 					href='/signup'
-					className='text-muted-foreground hover:text-foreground rounded-radius p-2'
+					className='text-foreground hover:text-muted-foreground rounded-radius p-2'
 					prefetch={false}
 				>
 					Signup
