@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import UserProvider from "@/context/UserContext";
 import AuthProvider from "@/context/AuthContext";
+import { rubik } from "@/app/fonts";
 
 export const metadata: Metadata = {
 	title: "Eventful",
@@ -21,7 +22,7 @@ export default function RootLayout({
 			<body
 				className={cn(
 					"min-h-screen bg-background text-foreground dark:bg-background dark:text-foreground antialiased",
-					`font-sans`
+					`${rubik.className}`
 				)}
 			>
 				<AuthProvider>
