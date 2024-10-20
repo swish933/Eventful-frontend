@@ -367,7 +367,10 @@ export default function CreateEventDialog() {
 												</Button>
 											</FormControl>
 										</PopoverTrigger>
-										<PopoverContent className='w-auto p-0' align='start'>
+										<PopoverContent
+											className='pointer-events-auto w-auto p-0'
+											align='start'
+										>
 											<Calendar
 												className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
 												mode='single'
@@ -413,7 +416,10 @@ export default function CreateEventDialog() {
 												</Button>
 											</FormControl>
 										</PopoverTrigger>
-										<PopoverContent className='w-auto p-0' align='start'>
+										<PopoverContent
+											className='pointer-events-auto w-auto p-0'
+											align='start'
+										>
 											<Calendar
 												className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
 												mode='single'
@@ -458,7 +464,10 @@ export default function CreateEventDialog() {
 												</Button>
 											</FormControl>
 										</PopoverTrigger>
-										<PopoverContent className='w-auto p-0' align='start'>
+										<PopoverContent
+											className='pointer-events-auto w-auto p-0'
+											align='start'
+										>
 											<Calendar
 												className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring'
 												mode='single'
