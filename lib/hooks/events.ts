@@ -14,3 +14,10 @@ export const useAllEvents = () => {
 
 	return { data: data?.payload || [], error, isLoading };
 };
+
+export const useEventById = (id: string) => {
+	const pathKey = `api/v1/events/${id}`;
+	const { data, error, isLoading } = useSWR(pathKey, fetcher);
+
+	return { data: data?.payload || null, error, isLoading };
+};

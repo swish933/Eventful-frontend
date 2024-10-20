@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
 import { grandstander } from "@/app/fonts";
 import { AuthContext } from "@/context/AuthContext";
+import Link from "next/link";
 
 export default function AppHeader() {
 	const { currentUser } = useContext(UserContext) as UserContextType;
@@ -27,10 +28,12 @@ export default function AppHeader() {
 	};
 
 	return (
-		<header className='flex sticky top-0 bg-background dark:bg-background text-foreground h-20 border-b w-full shrink-0 items-center justify-between px-4 md:px-6'>
-			<p className={`text-3xl font-semibold ${grandstander.className}`}>
-				Eventful
-			</p>
+		<header className='flex sticky top-0 bg-transparent text-foreground h-20 w-full shrink-0 items-center justify-between px-4 md:px-6 z-50 isolate backdrop-blur'>
+			<Link href='/events'>
+				<p className={`text-3xl font-semibold ${grandstander.className}`}>
+					Eventful
+				</p>
+			</Link>
 			<div className='flex items-center gap-4'>
 				<ModeToggle />
 				<DropdownMenu>

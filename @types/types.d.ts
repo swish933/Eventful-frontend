@@ -13,7 +13,7 @@ export interface IUser {
 
 export interface IEvent {
 	id: string;
-	name: "Pulse Fiesta 2.0";
+	name: string;
 	images: string[];
 	description: string;
 	price: number;
@@ -21,7 +21,23 @@ export interface IEvent {
 	startsAt: string;
 	endsAt: string;
 	eventType: string;
-	organizer: string;
+	organizer: string ;
+	customers: string[];
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface IPopulatedEvent {
+	id: string;
+	name: string;
+	images: string[];
+	description: string;
+	price: number;
+	location: string;
+	startsAt: string;
+	endsAt: string;
+	eventType: string;
+	organizer:  { avatar: string; username: string };
 	customers: string[];
 	createdAt: string;
 	updatedAt: string;

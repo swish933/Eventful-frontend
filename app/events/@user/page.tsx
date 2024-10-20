@@ -1,18 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useContext } from "react";
-import { UserContext } from "@/context/UserContext";
-import { IEvent, UserContextType } from "@/@types/types";
+import { IEvent } from "@/@types/types";
 import { useAllEvents } from "@/lib/hooks/events";
 import { Card, CardContent } from "@/components/ui/card";
-import AppHeader from "@/components/app-header";
 import Link from "next/link";
+import { formatDistanceToNowStrict } from "date-fns";
+import { Calendar } from "lucide-react";
 
 function EventCard({ event }: { event: IEvent }) {
 	return (
 		<Link key={event.id} href={`/events/${event.id}`}>
-			<Card className='bg-background dark:bg-background border-border overflow-hidden'>
+			<Card className='bg-background dark:bg-background border-border dark:border-border overflow-hidden'>
 				<CardContent className='p-0 space-y-4 rounded-radius'>
 					<Image
 						className='aspect-square object-cover'
@@ -21,9 +20,16 @@ function EventCard({ event }: { event: IEvent }) {
 						height={160}
 						width={320}
 					/>
-					<div className='pl-2'>
+					<div className='pl-2 space-y-1 pb-4'>
 						<p className='font-medium'>{event.name}</p>
-						<p className='font-normal'>&#8358;{event.price}</p>
+						<div className='flex text-sm font-semibold space-x'>
+							<Calendar className='w-4 h-4' />
+							<span className='ml-2'>
+								{formatDistanceToNowStrict(event.startsAt)}
+							</span>
+						</div>
+
+						<p className='text-sm'>&#8358;{event.price}</p>
 					</div>
 				</CardContent>
 			</Card>
@@ -36,9 +42,7 @@ export default function Events() {
 
 	return (
 		<>
-			<AppHeader />
-
-			<main className='my-10 mx-auto max-w-6xl px-4 md:px-0'>
+			<main>
 				<h1 className='text-2xl mb-10 font-bold'>Upcoming Events</h1>
 				<div className='grid place-items-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
 					{events?.map((event: IEvent) => (
