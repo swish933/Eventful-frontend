@@ -31,8 +31,8 @@ import { Input } from "@/components/ui/input";
 import { axiosInstance } from "@/lib/axios";
 import { grandstander } from "@/app/fonts";
 import {
-	MAX_FILE_SIZE,
 	ACCEPTED_IMAGE_TYPES,
+	MAX_FILE_SIZE,
 	TOAST_DURATION,
 } from "@/lib/constants";
 import { toast } from "sonner";
@@ -98,7 +98,7 @@ export default function RegisterForm() {
 		},
 	});
 
-	// const fileRef = form.register("avatar");
+	const fileRef = form.register("avatar");
 
 	async function onSubmit(userCredentials: z.infer<typeof formSchema>) {
 		try {
@@ -274,6 +274,7 @@ export default function RegisterForm() {
 													type='file'
 													accept='image/*'
 													className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
+													{...fileRef}
 												/>
 											</FormControl>
 											<FormMessage />
