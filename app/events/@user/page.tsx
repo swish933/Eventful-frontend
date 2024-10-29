@@ -20,7 +20,7 @@ function EventCard({ event }: { event: IEvent }) {
 		<Link key={event.id} href={`/events/${event.id}`}>
 			<Card className='bg-background dark:bg-background border-border dark:border-border overflow-hidden'>
 				<CardContent className='p-0 space-y-4 rounded-radius'>
-					<div className='relative w-full'>
+					<div className='relative w-full h-80'>
 						<Image
 							className='aspect-square object-cover'
 							src={event.images[0]}
