@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { CalendarPlus, CalendarClock } from "lucide-react";
+import { CalendarClock, CalendarPlus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -38,7 +38,7 @@ import {
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { AxiosResponse, AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { TimePicker } from "@/components/time-picker";
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
@@ -164,7 +164,7 @@ export default function CreateEventDialog() {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError && error.response) {
 				console.log(error.response.data);
-				toast.error("Something went wrong", TOAST_DURATION);
+				toast.error("Something went wrong. Please try again", TOAST_DURATION);
 			} else if (error instanceof Error) {
 				console.error(error.message);
 			}
@@ -228,7 +228,7 @@ export default function CreateEventDialog() {
 											required
 											maxLength={300}
 											placeholder='Description of event here'
-											className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
+											className='resize-none bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
 											{...field}
 										/>
 									</FormControl>
@@ -287,7 +287,7 @@ export default function CreateEventDialog() {
 											required
 											maxLength={250}
 											placeholder='Address or URL of event'
-											className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
+											className='resize-none bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
 											{...field}
 										/>
 									</FormControl>
@@ -354,7 +354,7 @@ export default function CreateEventDialog() {
 												<Button
 													variant={"outline"}
 													className={cn(
-														"w-[240px] bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring pl-3 text-left font-normal hover:bg-accent",
+														"w-[240px] bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring pl-3 text-left font-normal hover:bg-accent dark:hover:bg-accent",
 														!field.value && "text-muted-foreground"
 													)}
 												>
@@ -403,7 +403,7 @@ export default function CreateEventDialog() {
 												<Button
 													variant={"outline"}
 													className={cn(
-														"w-[240px] bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring pl-3 text-left font-normal hover:bg-accent",
+														"w-[240px] bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring pl-3 text-left font-normal hover:bg-accent dark:hover:bg-accent",
 														!field.value && "text-muted-foreground"
 													)}
 												>
@@ -451,7 +451,7 @@ export default function CreateEventDialog() {
 												<Button
 													variant={"outline"}
 													className={cn(
-														"w-[240px] bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring pl-3 text-left font-normal hover:bg-accent",
+														"w-[240px] bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring pl-3 text-left font-normal hover:bg-accent dark:hover:bg-accent",
 														!field.value && "text-muted-foreground"
 													)}
 												>

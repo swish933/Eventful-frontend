@@ -3,13 +3,13 @@
 import { useContext } from "react";
 import { Input } from "@/components/ui/input";
 import {
-	Home,
 	Calendar,
+	Home,
 	LineChart,
-	UserCircle,
 	PanelLeft,
 	Search,
 	Settings,
+	UserCircle,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -39,7 +39,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { UserContext } from "@/context/UserContext";
 import { AuthContext } from "@/context/AuthContext";
-import { UserContextType, AuthContextType } from "@/@types/types";
+import { AuthContextType, UserContextType } from "@/@types/types";
 import { grandstander } from "@/app/fonts";
 import { ModeToggle } from "@/components/mode-toggle";
 
@@ -191,7 +191,7 @@ export default function AdminLayout({
 							<Button
 								variant='outline'
 								size='icon'
-								className='overflow-hidden rounded-full bg-background dark:bg-background hover:bg-accent dark:hover:bg-accent border-border dark:border-border focus-visible:ring-ring dark:focus-visible:ring-ring'
+								className='overflow-hidden rounded-full bg-background dark:bg-background hover:bg-accent dark:hover:bg-accent border-border dark:border-border focus-visible:ring-ring dark:focus-visible:ring-ring h-9 w-9'
 							>
 								{currentUser?.avatar ? (
 									<Image
@@ -199,7 +199,7 @@ export default function AdminLayout({
 										width={36}
 										height={36}
 										alt='Avatar'
-										className='overflow-hidden rounded-full'
+										className='object-cover'
 									/>
 								) : (
 									<UserCircle className='h-9 w-9 stroke-1' />

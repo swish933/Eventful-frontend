@@ -8,32 +8,32 @@ import AuthProvider from "@/context/AuthContext";
 import { rubik } from "@/app/fonts";
 
 export const metadata: Metadata = {
-	title: "Eventful",
-	description: "An event management application",
+  title: "Eventful",
+  description: "An event management application",
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang='en'>
-			<body
-				className={cn(
-					"min-h-screen bg-background text-foreground dark:bg-background dark:text-foreground antialiased",
-					`${rubik.className}`
-				)}
-			>
-				<AuthProvider>
-					<UserProvider>
-						<ThemeProvider attribute='class' defaultTheme='dark'>
-							{children}
-							<Toaster position='top-right' richColors />
-						</ThemeProvider>
-					</UserProvider>
-				</AuthProvider>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en">
+      <body
+        className={cn(
+          "min-h-screen bg-background text-foreground dark:bg-background dark:text-foreground antialiased",
+          `${rubik.className}`,
+        )}
+      >
+        <AuthProvider>
+          <UserProvider>
+            <ThemeProvider attribute="class" defaultTheme="dark">
+              {children}
+              <Toaster position="top-right" richColors />
+            </ThemeProvider>
+          </UserProvider>
+        </AuthProvider>
+      </body>
+    </html>
+  );
 }
