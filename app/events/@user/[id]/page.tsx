@@ -46,7 +46,13 @@ function ImageCarousel({ images, name }: CarouselProps) {
 			<CarouselContent>
 				{images?.map((src, index) => (
 					<CarouselItem key={index} className=' h-80 md:h-[30rem] relative'>
-						<Image src={src} alt={name} fill priority={true} />
+						<Image
+							src={src}
+							alt={name}
+							className='object-contain'
+							fill
+							priority={true}
+						/>
 					</CarouselItem>
 				))}
 			</CarouselContent>
