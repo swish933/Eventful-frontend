@@ -177,7 +177,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
 			<section className='my-10 w-full lg:pl-8 lg:grid gap-28 grid-cols-[2fr_1fr] '>
 				<div className='space-y-8'>
-					<p>{format(event?.startsAt, "eeee, MMMM d")}</p>
+					<p>{format(event?.startsAt, "eeee, d MMMM, yyyy")}</p>
 					<p className='text-5xl font-semibold'>{event?.name}</p>
 					<p>{event?.description}</p>
 
@@ -211,7 +211,11 @@ export default function Page({ params }: { params: { id: string } }) {
 						<p className='text-xl font-semibold'>Date and time</p>
 						<div className='flex space-x-2 items-center'>
 							<CalendarCheck2 className='text-primary w-4 h-4' />
-							<span>{format(event?.startsAt, "eeee, MMMM d")}</span>
+							<p className='flex items-center space-x-2'>
+								<span>{format(event?.startsAt, "eeee, d MMMM, yyyy")}</span>
+								<span className='text-2xl'>&#183;</span>
+								<span>{format(event?.startsAt, "HH:mm")}</span>
+							</p>
 						</div>
 					</section>
 
