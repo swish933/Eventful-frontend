@@ -25,6 +25,8 @@ export interface IEvent {
 	customers: string[];
 	createdAt: string;
 	updatedAt: string;
+	ticketsSold?: number;
+	admitted?: number;
 }
 
 export interface IPopulatedEvent {
@@ -53,6 +55,15 @@ export interface IOrder {
 		IEvent,
 		"images" | "location" | "name" | "price" | "startsAt" | "eventType"
 	>;
+}
+
+export interface IOrderById {
+	id: string;
+	amount: number;
+	qrCode: string;
+	status: string;
+	customer: Pick<IUser, "email">;
+	event: Pick<IEvent, "location" | "name" | "price" | "startsAt" | "eventType">;
 }
 
 export type UserContextType = {
