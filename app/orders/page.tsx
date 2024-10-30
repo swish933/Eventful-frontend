@@ -20,8 +20,8 @@ function OrderCard({ order }: { order: IOrder }) {
 	return (
 		<Link key={order.id} href={`/events/${order.id}`}>
 			<Card className='bg-background dark:bg-background border-border dark:border-border overflow-hidden max-w-3xl rounded-radius'>
-				<CardContent className='grid grid-cols-[1fr,_2fr] p-0 gap-x-4 gap-y-8'>
-					<div className='relative'>
+				<CardContent className='grid grid-cols-1 sm:grid-cols-[1fr,_2fr] p-0 gap-x-4 gap-y-4 sm:gap-y-8'>
+					<div className='relative w-1/2 mx-auto sm:mx-0 aspect-square sm:aspect-auto sm:w-full sm:h-auto'>
 						<Image fill src={order.event.images[0]} alt={order.event.name} />
 					</div>
 					<div className='p-2	flex flex-col gap-y-2'>
