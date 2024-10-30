@@ -8,7 +8,7 @@ export const useOrders = () => {
 	return { data: data?.payload || [], error, isLoading };
 };
 
-export const useEventById = (id: string) => {
+export const useOrderById = (id: string) => {
 	const pathKey = `api/v1/orders/${id}`;
 	const { data, error, isLoading } = useSWR(pathKey, fetcher);
 
