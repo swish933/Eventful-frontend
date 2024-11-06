@@ -228,7 +228,7 @@ export default function CreateEventDialog() {
 											required
 											maxLength={300}
 											placeholder='Description of event here'
-											className='resize-none bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
+											className='resize-y bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
 											{...field}
 										/>
 									</FormControl>
@@ -287,7 +287,7 @@ export default function CreateEventDialog() {
 											required
 											maxLength={250}
 											placeholder='Address or URL of event'
-											className='resize-none bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
+											className='resize-y bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
 											{...field}
 										/>
 									</FormControl>

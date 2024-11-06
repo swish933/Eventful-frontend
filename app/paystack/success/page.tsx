@@ -11,7 +11,7 @@ export default function Page() {
 		setTimeout(() => {
 			router.push("/orders");
 		}, 3000);
-	}, []);
+	}, [router]);
 
 	return (
 		<div className='text-primary flex flex-col items-center justify-center h-screen'>

@@ -27,6 +27,7 @@ import { AxiosError } from "axios";
 import { toast } from "sonner";
 import paystackLogo from "@/public/paystack logo.svg";
 import { TOAST_DURATION } from "@/lib/constants";
+import Loading from "@/app/loading";
 
 type CarouselProps = { images: string[]; name: string };
 function ImageCarousel({ images, name }: CarouselProps) {
@@ -168,7 +169,7 @@ export default function Page({ params }: { params: { id: string } }) {
 	const [ticketCount, setTicketCount] = useState<number>(0);
 
 	if (isLoading) {
-		return <p>Loading...</p>;
+		return <Loading />;
 	}
 
 	return (

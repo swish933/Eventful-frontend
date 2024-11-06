@@ -1,6 +1,7 @@
 "use client";
 
 import { IOrderById } from "@/@types/types";
+import Loading from "@/app/loading";
 import { Badge } from "@/components/ui/badge";
 import { useOrderById } from "@/lib/hooks/orders";
 import Image from "next/image";
@@ -12,7 +13,7 @@ export default function Page({ params }: { params: { id: string } }) {
 		useOrderById(params.id);
 
 	if (isLoading) {
-		return <p>Loading...</p>;
+		return <Loading />;
 	}
 
 	return (

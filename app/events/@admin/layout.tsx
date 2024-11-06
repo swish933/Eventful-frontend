@@ -85,7 +85,7 @@ export default function AdminLayout({
 						</Tooltip>
 					</TooltipProvider>
 
-					<TooltipProvider>
+					{/* <TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger asChild>
 								<Link
@@ -98,10 +98,10 @@ export default function AdminLayout({
 							</TooltipTrigger>
 							<TooltipContent side='right'>Events</TooltipContent>
 						</Tooltip>
-					</TooltipProvider>
+					</TooltipProvider> */}
 				</nav>
 				<nav className='mt-auto flex flex-col items-center gap-4 px-2 py-4'>
-					<TooltipProvider>
+					{/* <TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger asChild>
 								<Link
@@ -114,7 +114,7 @@ export default function AdminLayout({
 							</TooltipTrigger>
 							<TooltipContent side='right'>Settings</TooltipContent>
 						</Tooltip>
-					</TooltipProvider>
+					</TooltipProvider> */}
 				</nav>
 			</aside>
 			<div className='flex flex-col sm:gap-4 sm:py-4 sm:pl-14'>
@@ -145,21 +145,6 @@ export default function AdminLayout({
 								>
 									<Home className='h-5 w-5' />
 									Dashboard
-								</Link>
-								<Link
-									href='/events/all'
-									className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
-								>
-									<Calendar className='h-5 w-5' />
-									Events
-								</Link>
-
-								<Link
-									href='/events/settings'
-									className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
-								>
-									<LineChart className='h-5 w-5' />
-									Settings
 								</Link>
 							</nav>
 						</SheetContent>

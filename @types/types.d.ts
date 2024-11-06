@@ -45,6 +45,12 @@ export interface IPopulatedEvent {
 	updatedAt: string;
 }
 
+export interface IAnalytics {
+	attendees: number;
+	tickets: number;
+	scannedCodes: number;
+}
+
 export interface IOrder {
 	id: string;
 	amount: number;
@@ -53,7 +59,7 @@ export interface IOrder {
 	customer: string;
 	event: Pick<
 		IEvent,
-		"images" | "location" | "name" | "price" | "startsAt" | "eventType"
+		"images" | "location" | "name" | "price" | "startsAt" | "eventType" | "id"
 	>;
 }
 

@@ -10,6 +10,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { Calendar } from "lucide-react";
 import { UserContext } from "@/context/UserContext";
 import { useContext } from "react";
+import Loading from "@/app/loading";
 
 function EventCard({ event }: { event: IEvent }) {
 	const { currentUser } = useContext(UserContext) as UserContextType;
@@ -30,15 +31,15 @@ function EventCard({ event }: { event: IEvent }) {
 						/>
 					</div>
 					<div className='pl-2 space-y-1 pb-4 '>
-						<p className='font-medium'>{event.name}</p>
+						<p className='font-medium'>{event?.name}</p>
 						<div className='flex text-sm font-semibold space-x'>
 							<Calendar className='w-4 h-4' />
 							<span className='ml-2'>
-								{formatDistanceToNowStrict(event.startsAt)} to go
+								{formatDistanceToNowStrict(event?.startsAt)} to go
 							</span>
 						</div>
 						<div className='flex justify-between pr-2'>
-							<p className='text-sm'>&#8358;{event.price}</p>
+							<p className='text-sm'>&#8358;{event?.price}</p>
 							{attending && (
 								<Badge className='bg-primary text-primary-foreground dark:bg-primary dark:first:text-primary-foreground'>
 									Attending
@@ -53,16 +54,22 @@ function EventCard({ event }: { event: IEvent }) {
 }
 
 export default function Events() {
-	const { data: events } = useAllEvents();
+	const { data, isLoading } = useAllEvents();
+	const { events, meta } = data;
+
+	if (isLoading) {
+		return <Loading />;
+	}
 
 	return (
 		<>
 			<main>
 				<h1 className='text-2xl mb-10 font-bold'>Upcoming Events</h1>
 				<div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-4 gap-y-8'>
-					{events?.map((event: IEvent) => (
-						<EventCard key={event.id} event={event} />
-					))}
+					{events.length > 0 &&
+						events?.map((event: IEvent) => (
+							<EventCard key={event.id} event={event} />
+						))}
 				</div>
 			</main>
 		</>
