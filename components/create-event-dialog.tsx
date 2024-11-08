@@ -50,7 +50,7 @@ const formSchema = z
 		name: z.string(),
 		description: z
 			.string()
-			.max(300, { message: "Must be less than 300 characters" }),
+			.max(500, { message: "Must be less than 300 characters" }),
 		price: z.coerce.number().min(0, { message: "Price cannot be less than 0" }),
 		location: z
 			.string()
@@ -226,7 +226,7 @@ export default function CreateEventDialog() {
 										<Textarea
 											id='description'
 											required
-											maxLength={300}
+											maxLength={500}
 											placeholder='Description of event here'
 											className='resize-y bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
 											{...field}

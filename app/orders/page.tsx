@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import CreateReminderDialog from "@/components/create-reminder";
+import Loading from "../loading";
+import { currencyFormat } from "@/lib/utils";
 
 function OrderCard({ order }: { order: IOrder }) {
 	return (
@@ -48,7 +50,7 @@ function OrderCard({ order }: { order: IOrder }) {
 						</p>
 						<p className='flex items-center space-x-2'>
 							<CreditCard className='text-primary w-4 h-4' />
-							<span>Amount paid: &#8358;{order.amount}</span>
+							<span>Amount paid: {currencyFormat(order.amount)}</span>
 						</p>
 						<div className='flex justify-between items-center'>
 							<p className='flex items-center space-x-2'>
@@ -74,7 +76,7 @@ export default function Page() {
 	const { orders, meta } = data;
 
 	if (isLoading) {
-		return <p>Loading...</p>;
+		return <Loading />;
 	}
 
 	return (

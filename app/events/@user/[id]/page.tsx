@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import paystackLogo from "@/public/paystack logo.svg";
 import { TOAST_DURATION } from "@/lib/constants";
 import Loading from "@/app/loading";
+import { currencyFormat } from "@/lib/utils";
 
 type CarouselProps = { images: string[]; name: string };
 function ImageCarousel({ images, name }: CarouselProps) {
@@ -145,7 +146,8 @@ function PaymentBox({
 				</div>
 			</div>
 			<p className='font-medium'>
-				&#8358;{price} <span className='text-sm font-normal'>(per ticket)</span>
+				{currencyFormat(price)}{" "}
+				<span className='text-sm font-normal'>(per ticket)</span>
 			</p>
 			<Button
 				onClick={() => initiateTransaction()}

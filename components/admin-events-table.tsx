@@ -34,6 +34,7 @@ import Loading from "@/app/loading";
 import AnalyticsCard from "@/components/analytics-card";
 import { useAnalytics } from "@/lib/hooks/analytics";
 import { useRouter } from "next/navigation";
+import { currencyFormat } from "@/lib/utils";
 
 type Props = {
 	username: string | undefined;
@@ -54,7 +55,7 @@ function AllTimeAnalytics({ events }: AnalyticsProps) {
 	}
 
 	return (
-		<div className='flex flex-wrap gap-8 justify-center items-center'>
+		<div className='grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4'>
 			<AnalyticsCard description={`Total Events`} data={events} />
 			<AnalyticsCard
 				description={`Total Tickets sold`}
@@ -167,10 +168,10 @@ export default function EventsTable({ username }: Props) {
 
 										<TableCell className='font-medium'>{event?.name}</TableCell>
 
-										<TableCell>&#8358;{event?.price}</TableCell>
+										<TableCell>{currencyFormat(event?.price)}</TableCell>
 
 										<TableCell className='hidden md:table-cell'>
-											{event?.customers.length}
+											{event?.customers?.length}
 										</TableCell>
 
 										<TableCell className='hidden md:table-cell'>

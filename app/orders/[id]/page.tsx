@@ -4,6 +4,7 @@ import { IOrderById } from "@/@types/types";
 import Loading from "@/app/loading";
 import { Badge } from "@/components/ui/badge";
 import { useOrderById } from "@/lib/hooks/orders";
+import { currencyFormat } from "@/lib/utils";
 import Image from "next/image";
 
 type Props = {};
@@ -26,7 +27,7 @@ export default function Page({ params }: { params: { id: string } }) {
 				/>
 			</div>
 			<p className='font-medium'>{order.event.name}</p>
-			<p>&#8358;{order.amount}</p>
+			<p>{currencyFormat(order.amount)}</p>
 			<p>{order.customer.email}</p>
 			<Badge className='uppercase bg-primary dark:bg-primary'>
 				{order.status === "successful" ? "Paid" : "Pending"}

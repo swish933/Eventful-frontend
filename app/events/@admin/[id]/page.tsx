@@ -5,12 +5,14 @@ import Loading from "@/app/loading";
 import AnalyticsCard from "@/components/analytics-card";
 import { useAnalyticsById } from "@/lib/hooks/analytics";
 import { useEventById } from "@/lib/hooks/events";
+import { currencyFormat } from "@/lib/utils";
 
 type AnalyticsProps = {
 	id: string;
+	price: number;
 };
 
-function Analytics({ id }: AnalyticsProps) {
+function Analytics({ id, price }: AnalyticsProps) {
 	const {
 		data: analytics,
 		isLoading,
@@ -21,7 +23,7 @@ function Analytics({ id }: AnalyticsProps) {
 	}
 
 	return (
-		<div className='flex flex-wrap gap-8 justify-center items-center'>
+		<div className='grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4'>
 			<AnalyticsCard
 				description={`Total Tickets sold`}
 				data={analytics.tickets}
@@ -29,6 +31,10 @@ function Analytics({ id }: AnalyticsProps) {
 			<AnalyticsCard
 				description={`Total Attendees`}
 				data={analytics.attendees}
+			/>
+			<AnalyticsCard
+				description={`Total Sales`}
+				data={currencyFormat(analytics.tickets * price)}
 			/>
 			<AnalyticsCard
 				description={`Scanned codes`}
@@ -47,12 +53,17 @@ export default function Page({ params }: { params: { id: string } }) {
 	}
 
 	return (
-		<main className='my-10'>
-			<Analytics id={params?.id} />
+		<main className='my-10 p-4 sm:px-6'>
+			<Analytics id={params?.id} price={event?.price} />
 			<section className='flex flex-col items-center my-10 gap-y-6 mx-auto max-w-lg'>
 				<p className='text-3xl font-semibold'>{event?.name}</p>
 				<p>{event?.description}</p>
-				<p className='font-medium'>&#8358;{event?.price}</p>
+				<p className='font-medium'>
+					{new Intl.NumberFormat("en-NG", {
+						style: "currency",
+						currency: "NGN",
+					}).format(event?.price)}
+				</p>
 			</section>
 		</main>
 	);
