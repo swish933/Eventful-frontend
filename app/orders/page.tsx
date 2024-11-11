@@ -19,6 +19,8 @@ import { Badge } from "@/components/ui/badge";
 import CreateReminderDialog from "@/components/create-reminder";
 import Loading from "../loading";
 import { currencyFormat } from "@/lib/utils";
+import { PaginationWithLinks } from "@/components/pagination-with-links";
+import { useSearchParams } from "next/navigation";
 
 function OrderCard({ order }: { order: IOrder }) {
 	return (
@@ -72,7 +74,11 @@ function OrderCard({ order }: { order: IOrder }) {
 }
 
 export default function Page() {
-	const { data, isLoading } = useOrders();
+	const searchParams = useSearchParams();
+	const page = parseInt(searchParams.get("page") || "1");
+	const limit = parseInt(searchParams.get("limit") || "10");
+
+	const { data, isLoading } = useOrders(page, limit);
 	const { orders, meta } = data;
 
 	if (isLoading) {
@@ -84,6 +90,17 @@ export default function Page() {
 			{orders?.map((order: IOrder) => (
 				<OrderCard key={order.id} order={order} />
 			))}
+
+			<PaginationWithLinks
+				page={meta?.page}
+				pageSize={meta?.limit}
+				totalCount={meta?.total}
+				pageSizeSelectOptions={{
+					pageSizeOptions: [1, 5, 10, 15, 20],
+					pageSizeSearchParam: "limit",
+				}}
+				perPageDescriptor='Orders'
+			/>
 		</main>
 	);
 }

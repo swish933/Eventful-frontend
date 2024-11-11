@@ -29,6 +29,7 @@ export interface PaginationWithLinksProps {
 	pageSize: number;
 	page: number;
 	pageSearchParam?: string;
+	perPageDescriptor?: string;
 }
 
 /**
@@ -49,6 +50,7 @@ export function PaginationWithLinks({
 	totalCount,
 	page,
 	pageSearchParam,
+	perPageDescriptor,
 }: PaginationWithLinksProps) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -152,6 +154,7 @@ export function PaginationWithLinks({
 						options={pageSizeSelectOptions.pageSizeOptions}
 						setPageSize={navToPageSize}
 						pageSize={pageSize}
+						perPageDescriptor={perPageDescriptor}
 					/>
 				</div>
 			)}
@@ -190,14 +193,18 @@ function SelectRowsPerPage({
 	options,
 	setPageSize,
 	pageSize,
+	perPageDescriptor,
 }: {
 	options: number[];
 	setPageSize: (newSize: number) => void;
 	pageSize: number;
+	perPageDescriptor?: string;
 }) {
 	return (
 		<div className='flex items-center gap-4'>
-			<span className='whitespace-nowrap text-sm'>Events per page</span>
+			<span className='whitespace-nowrap text-sm'>{`${
+				perPageDescriptor || "Rows"
+			} per page`}</span>
 
 			<Select
 				value={String(pageSize)}

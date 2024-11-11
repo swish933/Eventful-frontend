@@ -91,6 +91,7 @@ export default function Events() {
 							page={meta?.page}
 							pageSize={meta?.limit}
 							totalCount={meta?.total}
+							perPageDescriptor='Events'
 							pageSizeSelectOptions={{
 								pageSizeOptions: [5, 10, 15, 20],
 								pageSizeSearchParam: "limit",

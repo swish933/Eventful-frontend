@@ -87,12 +87,12 @@ export default function CreateReminderDialog({ event }: ReminderProps) {
 					className='absolute top-2 right-2 h-7 gap-1 bg-primary dark:bg-primary hover:bg-primary/50 dark:hover:bg-primary/50 text-primary-foreground dark:text-primary-foreground ring-ring dark:ring-ring pointer-events-auto'
 					onClick={(e) => e.stopPropagation()}
 				>
-					<>
+					<div className='flex items-center space-x-2'>
 						<AlarmClockPlus className='h-4 w-4' />
-						{/* <span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>
-							Add reminder
-						</span> */}
-					</>
+						<span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>
+							Set a reminder
+						</span>
+					</div>
 				</Button>
 			</DialogTrigger>
 			<DialogContent className='w-11/12 sm:max-w-sm max-h-[60vh] top-52 overflow-y-scroll bg-card dark:bg-card text-card-foreground border-border dark:border-border border-2'>
