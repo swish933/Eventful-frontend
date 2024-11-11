@@ -1,15 +1,15 @@
 import { fetcher } from "../axios";
 import useSWR from "swr";
 
-export const useEvents = () => {
-	const pathKey = `/api/v1/events/myevents`;
+export const useEvents = (page: number, limit: number) => {
+	const pathKey = `/api/v1/events/myevents/?page=${page}&limit=${limit}`;
 	const { data, error, isLoading } = useSWR(pathKey, fetcher);
 
 	return { data: data?.payload || [], error, isLoading };
 };
 
-export const useAllEvents = () => {
-	const pathKey = `/api/v1/events/`;
+export const useAllEvents = (page: number, limit: number) => {
+	const pathKey = `/api/v1/events/?page=${page}&limit=${limit}`;
 	const { data, error, isLoading } = useSWR(pathKey, fetcher);
 
 	return { data: data?.payload || [], error, isLoading };

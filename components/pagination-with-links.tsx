@@ -197,20 +197,24 @@ function SelectRowsPerPage({
 }) {
 	return (
 		<div className='flex items-center gap-4'>
-			<span className='whitespace-nowrap text-sm'>Rows per page</span>
+			<span className='whitespace-nowrap text-sm'>Events per page</span>
 
 			<Select
 				value={String(pageSize)}
 				onValueChange={(value) => setPageSize(Number(value))}
 			>
-				<SelectTrigger>
+				<SelectTrigger className='border-input dark:border-input bg-background dark:bg-background'>
 					<SelectValue placeholder='Select page size'>
 						{String(pageSize)}
 					</SelectValue>
 				</SelectTrigger>
-				<SelectContent>
+				<SelectContent className='border-input dark:border-input bg-background dark:bg-background  text-foreground dark:text-foreground'>
 					{options.map((option) => (
-						<SelectItem key={option} value={String(option)}>
+						<SelectItem
+							className='focus:bg-accent dark:focus:bg-accent'
+							key={option}
+							value={String(option)}
+						>
 							{option}
 						</SelectItem>
 					))}

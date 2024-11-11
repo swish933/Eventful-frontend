@@ -33,8 +33,9 @@ import { IEvent, IAnalytics } from "@/@types/types";
 import Loading from "@/app/loading";
 import AnalyticsCard from "@/components/analytics-card";
 import { useAnalytics } from "@/lib/hooks/analytics";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { currencyFormat } from "@/lib/utils";
+import { PaginationWithLinks } from "./pagination-with-links";
 
 type Props = {
 	username: string | undefined;
@@ -74,7 +75,11 @@ function AllTimeAnalytics({ events }: AnalyticsProps) {
 }
 
 export default function EventsTable({ username }: Props) {
-	const { data, isLoading } = useEvents();
+	const searchParams = useSearchParams();
+	const page = parseInt(searchParams.get("page") || "1");
+	const limit = parseInt(searchParams.get("limit") || "10");
+
+	const { data, isLoading } = useEvents(page, limit);
 	const { events, meta } = data;
 
 	const router = useRouter();
@@ -89,7 +94,7 @@ export default function EventsTable({ username }: Props) {
 				Welcome, <span className='font-bold'>@{username}</span>
 			</h2>
 
-			<AllTimeAnalytics events={events.length} />
+			<AllTimeAnalytics events={meta?.total} />
 
 			<hr className='border' />
 
@@ -201,10 +206,26 @@ export default function EventsTable({ username }: Props) {
 						</TableBody>
 					</Table>
 				</CardContent>
-				<CardFooter>
+				<CardFooter className='flex justify-between items-center'>
 					<div className='text-xs text-muted-foreground'>
-						Showing <strong>1-10</strong> of <strong>32</strong> products
+						Showing{" "}
+						<strong>
+							{meta?.limit * meta?.page - meta?.limit + 1}-
+							{meta?.total < meta?.limit * meta?.page
+								? meta?.total
+								: meta?.limit * meta?.page}
+						</strong>{" "}
+						of <strong>{meta?.total}</strong> events
 					</div>
+					<PaginationWithLinks
+						page={meta?.page}
+						pageSize={meta?.limit}
+						totalCount={meta?.total}
+						pageSizeSelectOptions={{
+							pageSizeOptions: [5, 10, 15, 20, 25, 50],
+							pageSizeSearchParam: "limit",
+						}}
+					/>
 				</CardFooter>
 			</Card>
 		</main>

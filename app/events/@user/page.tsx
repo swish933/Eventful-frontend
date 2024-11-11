@@ -9,9 +9,11 @@ import Link from "next/link";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Banknote, Calendar } from "lucide-react";
 import { UserContext } from "@/context/UserContext";
-import { useContext } from "react";
+import { Suspense, useContext } from "react";
 import Loading from "@/app/loading";
 import { currencyFormat } from "@/lib/utils";
+import { PaginationWithLinks } from "@/components/pagination-with-links";
+import { useSearchParams } from "next/navigation";
 
 function EventCard({ event }: { event: IEvent }) {
 	const { currentUser } = useContext(UserContext) as UserContextType;
@@ -61,7 +63,11 @@ function EventCard({ event }: { event: IEvent }) {
 }
 
 export default function Events() {
-	const { data, isLoading } = useAllEvents();
+	const searchParams = useSearchParams();
+	const page = parseInt(searchParams.get("page") || "1");
+	const limit = parseInt(searchParams.get("limit") || "10");
+
+	const { data, isLoading } = useAllEvents(page, limit);
 	const { events, meta } = data;
 
 	if (isLoading) {
@@ -70,17 +76,29 @@ export default function Events() {
 
 	return (
 		<>
-			<main>
-				<h1 className='text-2xl mb-10 font-bold'>Upcoming Events</h1>
-				<div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-4 gap-y-8'>
-					{events?.length > 0 &&
-						events?.map((event: IEvent) => (
-							<EventCard key={event.id} event={event} />
-						))}
-				</div>
+			<Suspense fallback={<Loading />}>
+				<main>
+					<h1 className='text-2xl mb-10 font-bold'>Upcoming Events</h1>
+					<div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-4 gap-y-8'>
+						{events?.length > 0 &&
+							events?.map((event: IEvent) => (
+								<EventCard key={event.id} event={event} />
+							))}
+					</div>
 
-				{/* <PaginationSection  total={total} itemsPerPage={limit} /> */}
-			</main>
+					<div className='my-4'>
+						<PaginationWithLinks
+							page={meta?.page}
+							pageSize={meta?.limit}
+							totalCount={meta?.total}
+							pageSizeSelectOptions={{
+								pageSizeOptions: [5, 10, 15, 20],
+								pageSizeSearchParam: "limit",
+							}}
+						/>
+					</div>
+				</main>
+			</Suspense>
 		</>
 	);
 }

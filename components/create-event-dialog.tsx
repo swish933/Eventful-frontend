@@ -44,6 +44,7 @@ import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { useRef } from "react";
 import { useSWRConfig } from "swr";
+import { useSearchParams } from "next/navigation";
 
 const formSchema = z
 	.object({
@@ -100,6 +101,7 @@ const formSchema = z
 
 export default function CreateEventDialog() {
 	const ref = useRef<HTMLButtonElement>(null);
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -114,7 +116,12 @@ export default function CreateEventDialog() {
 			images: undefined,
 		},
 	});
+
 	const { mutate } = useSWRConfig();
+
+	const searchParams = useSearchParams();
+	const page = parseInt(searchParams.get("page") || "1");
+	const limit = parseInt(searchParams.get("limit") || "10");
 
 	const fileRef = form.register("images", { required: true });
 
@@ -160,7 +167,7 @@ export default function CreateEventDialog() {
 			toast.success(response.data.message, TOAST_DURATION);
 			form.reset();
 
-			mutate("/api/v1/events/myevents");
+			mutate(`/api/v1/events/myevents/?page=${page}&limit=${limit}`);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError && error.response) {
 				console.log(error.response.data);
