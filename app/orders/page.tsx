@@ -13,7 +13,6 @@ import {
 	LinkIcon,
 	TicketCheck,
 	CreditCard,
-	AlarmClockPlus,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import CreateReminderDialog from "@/components/create-reminder";
@@ -91,16 +90,18 @@ export default function Page() {
 				<OrderCard key={order.id} order={order} />
 			))}
 
-			<PaginationWithLinks
-				page={meta?.page}
-				pageSize={meta?.limit}
-				totalCount={meta?.total}
-				pageSizeSelectOptions={{
-					pageSizeOptions: [1, 5, 10, 15, 20],
-					pageSizeSearchParam: "limit",
-				}}
-				perPageDescriptor='Orders'
-			/>
+			{orders && (
+				<PaginationWithLinks
+					page={meta?.page}
+					pageSize={meta?.limit}
+					totalCount={meta?.total}
+					pageSizeSelectOptions={{
+						pageSizeOptions: [1, 5, 10, 15, 20],
+						pageSizeSearchParam: "limit",
+					}}
+					perPageDescriptor='Orders'
+				/>
+			)}
 		</main>
 	);
 }
