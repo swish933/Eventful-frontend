@@ -29,17 +29,15 @@ import {
 import { format } from "date-fns";
 import CreateEventDialogBtn from "@/components/create-event-dialog";
 import { useEvents } from "@/lib/hooks/events";
-import { IEvent, IAnalytics } from "@/@types/types";
+import { IEvent, IAnalytics, UserContextType } from "@/@types/types";
 import Loading from "@/app/loading";
 import AnalyticsCard from "@/components/analytics-card";
 import { useAnalytics } from "@/lib/hooks/analytics";
 import { useRouter, useSearchParams } from "next/navigation";
 import { currencyFormat } from "@/lib/utils";
 import { PaginationWithLinks } from "./pagination-with-links";
-
-type Props = {
-	username: string | undefined;
-};
+import { useContext } from "react";
+import { UserContext } from "@/context/UserContext";
 
 type AnalyticsProps = {
 	events: number;
@@ -74,11 +72,12 @@ function AllTimeAnalytics({ events }: AnalyticsProps) {
 	);
 }
 
-export default function EventsTable({ username }: Props) {
+export default function EventsTable() {
 	const searchParams = useSearchParams();
 	const page = parseInt(searchParams.get("page") || "1");
 	const limit = parseInt(searchParams.get("limit") || "10");
 
+	const { currentUser } = useContext(UserContext) as UserContextType;
 	const { data, isLoading } = useEvents(page, limit);
 	const { events, meta } = data;
 
@@ -91,7 +90,7 @@ export default function EventsTable({ username }: Props) {
 	return (
 		<main className='grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8'>
 			<h2>
-				Welcome, <span className='font-bold'>@{username}</span>
+				Welcome, <span className='font-bold'>@{currentUser?.username}</span>
 			</h2>
 
 			<AllTimeAnalytics events={meta?.total} />
@@ -217,15 +216,17 @@ export default function EventsTable({ username }: Props) {
 						</strong>{" "}
 						of <strong>{meta?.total}</strong> events
 					</div>
-					<PaginationWithLinks
-						page={meta?.page}
-						pageSize={meta?.limit}
-						totalCount={meta?.total}
-						pageSizeSelectOptions={{
-							pageSizeOptions: [5, 10, 15, 20, 25, 50],
-							pageSizeSearchParam: "limit",
-						}}
-					/>
+					{events && (
+						<PaginationWithLinks
+							page={meta?.page}
+							pageSize={meta?.limit}
+							totalCount={meta?.total}
+							pageSizeSelectOptions={{
+								pageSizeOptions: [5, 10, 15, 20, 25, 50],
+								pageSizeSearchParam: "limit",
+							}}
+						/>
+					)}
 				</CardFooter>
 			</Card>
 		</main>

@@ -89,9 +89,9 @@ export default function CreateReminderDialog({ event }: ReminderProps) {
 				>
 					<div className='flex items-center space-x-2'>
 						<AlarmClockPlus className='h-4 w-4' />
-						<span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>
+						{/* <span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>
 							Set a reminder
-						</span>
+						</span> */}
 					</div>
 				</Button>
 			</DialogTrigger>
