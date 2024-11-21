@@ -2,15 +2,7 @@
 
 import { useContext } from "react";
 import { Input } from "@/components/ui/input";
-import {
-	Calendar,
-	Home,
-	LineChart,
-	PanelLeft,
-	Search,
-	Settings,
-	UserCircle,
-} from "lucide-react";
+import { Home, PanelLeft, Search, UserCircle } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
 	DropdownMenu,
