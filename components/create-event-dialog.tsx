@@ -5,7 +5,6 @@ import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
-	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -383,7 +382,9 @@ export default function CreateEventDialog() {
 												mode='single'
 												selected={field.value}
 												onSelect={field.onChange}
-												initialFocus
+												showOutsideDays={false}
+												fromYear={new Date().getFullYear()}
+												toYear={new Date().getFullYear() + 1}
 											/>
 											<div className='p-3 border-t border-border'>
 												<TimePicker
@@ -430,9 +431,11 @@ export default function CreateEventDialog() {
 											<Calendar
 												className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
 												mode='single'
+												showOutsideDays={false}
+												fromYear={new Date().getFullYear()}
+												toYear={new Date().getFullYear() + 1}
 												selected={field.value}
 												onSelect={field.onChange}
-												initialFocus
 											/>
 											<div className='p-3 border-t border-border'>
 												<TimePicker
@@ -478,9 +481,11 @@ export default function CreateEventDialog() {
 											<Calendar
 												className='bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring'
 												mode='single'
+												showOutsideDays={false}
+												fromYear={new Date().getFullYear()}
+												toYear={new Date().getFullYear() + 1}
 												selected={field.value}
 												onSelect={field.onChange}
-												initialFocus
 											/>
 											<div className='p-3 border-t border-border'>
 												<TimePicker

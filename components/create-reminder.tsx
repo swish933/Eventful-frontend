@@ -138,7 +138,8 @@ export default function CreateReminderDialog({ event }: ReminderProps) {
 												mode='single'
 												selected={field.value}
 												onSelect={field.onChange}
-												initialFocus
+												fromYear={new Date().getFullYear()}
+												toYear={new Date().getFullYear() + 1}
 											/>
 											<div className='p-3 border-t border-border'>
 												<TimePicker
