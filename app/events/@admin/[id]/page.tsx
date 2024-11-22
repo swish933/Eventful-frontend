@@ -26,19 +26,19 @@ function Analytics({ id, price }: AnalyticsProps) {
 		<div className='grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4'>
 			<AnalyticsCard
 				description={`Total Tickets sold`}
-				data={analytics.tickets}
+				data={analytics?.tickets}
 			/>
 			<AnalyticsCard
 				description={`Total Attendees`}
-				data={analytics.attendees}
+				data={analytics?.attendees}
 			/>
 			<AnalyticsCard
 				description={`Total Sales`}
-				data={currencyFormat(analytics.tickets * price)}
+				data={currencyFormat(analytics?.tickets * price)}
 			/>
 			<AnalyticsCard
 				description={`Scanned codes`}
-				data={analytics.scannedCodes}
+				data={analytics?.scannedCodes}
 			/>
 		</div>
 	);
