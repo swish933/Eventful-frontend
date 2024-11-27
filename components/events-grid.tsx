@@ -72,12 +72,17 @@ export default function EventsGrid() {
 
 	return (
 		<Suspense fallback={<Loading />}>
-			<div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-4 gap-y-8'>
-				{events?.length > 0 &&
-					events?.map((event: IEvent) => (
+			{events?.length > 0 ? (
+				<div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-x-4 gap-y-8'>
+					{events?.map((event: IEvent) => (
 						<EventCard key={event.id} event={event} />
 					))}
-			</div>
+				</div>
+			) : (
+				<div className='mx-auto min-h-[70vh] flex items-center text-4xl'>
+					No events yet!
+				</div>
+			)}
 			<div className='my-4'>
 				{events && (
 					<PaginationWithLinks

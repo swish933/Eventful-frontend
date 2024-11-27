@@ -17,7 +17,7 @@ export default function AnalyticsCard({ description, data }: Props) {
 				<CardTitle>{description}</CardTitle>
 			</CardHeader>
 			<CardContent className='flex-1'>
-				<p className='text-3xl'>{data}</p>
+				<p className='text-3xl'>{data ? data : "-"}</p>
 			</CardContent>
 		</Card>
 	);
