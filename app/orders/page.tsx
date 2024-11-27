@@ -86,9 +86,15 @@ export default function Page() {
 
 	return (
 		<main className='flex flex-col space-y-8'>
-			{orders?.map((order: IOrder) => (
-				<OrderCard key={order.id} order={order} />
-			))}
+			{orders?.length > 0 ? (
+				orders?.map((order: IOrder) => (
+					<OrderCard key={order.id} order={order} />
+				))
+			) : (
+				<div className='mx-auto min-h-[70vh] flex items-center text-4xl'>
+					No orders!
+				</div>
+			)}
 
 			{orders && (
 				<PaginationWithLinks
