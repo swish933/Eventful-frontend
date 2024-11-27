@@ -46,7 +46,7 @@ export default function LoginForm() {
 	useEffect(() => {
 		const from = searchParams.get("from");
 		if (from) {
-			toast.success("Registration successful!", { duration: 3000 });
+			toast.success("Registration successful!", { duration: 2500 });
 		}
 	}, [searchParams]);
 
