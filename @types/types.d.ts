@@ -75,10 +75,11 @@ export interface IOrderById {
 export type UserContextType = {
 	currentUser: IUser | null;
 	updateUser: (u: IUser) => void;
+	clearUser: () => void;
 };
 
 export type AuthContextType = {
-	token: string | null;
+	auth: string | null;
 	updateToken: (t: string) => void;
 	deleteToken: () => void;
 };
