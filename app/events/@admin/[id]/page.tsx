@@ -3,6 +3,7 @@
 import { IAnalytics, IEvent } from "@/@types/types";
 import Loading from "@/app/loading";
 import AnalyticsCard from "@/components/analytics-card";
+import withAuth from "@/components/withAuth";
 import { useAnalyticsById } from "@/lib/hooks/analytics";
 import { useEventById } from "@/lib/hooks/events";
 import { currencyFormat } from "@/lib/utils";
@@ -44,7 +45,7 @@ function Analytics({ id, price }: AnalyticsProps) {
 	);
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+function Page({ params }: { params: { id: string } }) {
 	const { data: event, isLoading }: { data: IEvent; isLoading: boolean } =
 		useEventById(params?.id);
 
@@ -68,3 +69,5 @@ export default function Page({ params }: { params: { id: string } }) {
 		</main>
 	);
 }
+
+export default withAuth(Page);

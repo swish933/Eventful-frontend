@@ -20,6 +20,7 @@ import Loading from "../loading";
 import { currencyFormat } from "@/lib/utils";
 import { PaginationWithLinks } from "@/components/pagination-with-links";
 import { useSearchParams } from "next/navigation";
+import withAuth from "@/components/withAuth";
 
 function OrderCard({ order }: { order: IOrder }) {
 	return (
@@ -72,8 +73,9 @@ function OrderCard({ order }: { order: IOrder }) {
 	);
 }
 
-export default function Page() {
+function Page() {
 	const searchParams = useSearchParams();
+
 	const page = parseInt(searchParams.get("page") || "1");
 	const limit = parseInt(searchParams.get("limit") || "10");
 
@@ -111,3 +113,5 @@ export default function Page() {
 		</main>
 	);
 }
+
+export default withAuth(Page);
