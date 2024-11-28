@@ -40,11 +40,14 @@ export default function AdminLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { currentUser } = useContext(UserContext) as UserContextType;
+	const { currentUser, clearUser } = useContext(
+		UserContext
+	) as UserContextType;
 	const { deleteToken } = useContext(AuthContext) as AuthContextType;
 
 	const logout = () => {
 		deleteToken();
+		clearUser();
 	};
 
 	return (

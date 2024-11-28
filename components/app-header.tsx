@@ -21,7 +21,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function AppHeader() {
-	const { currentUser } = useContext(UserContext) as UserContextType;
+	const { currentUser, clearUser } = useContext(UserContext) as UserContextType;
 	const { deleteToken } = useContext(AuthContext) as AuthContextType;
 	const router = useRouter();
 
@@ -30,6 +30,7 @@ export default function AppHeader() {
 
 	const logout = (): void => {
 		deleteToken();
+		clearUser();
 	};
 
 	return (
