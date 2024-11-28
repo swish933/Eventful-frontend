@@ -29,9 +29,15 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { axiosInstance } from "@/lib/axios";
 import { grandstander } from "@/app/fonts";
 import { AuthContext } from "@/context/AuthContext";
-import { AuthContextType } from "@/@types/types";
+import {
+	AuthContextType,
+	ApiResponse,
+	IUser,
+	UserContextType,
+} from "@/@types/types";
 import { Suspense } from "react";
-import Loading  from '@/app/loading';
+import Loading from "@/app/loading";
+import { UserContext } from "@/context/UserContext";
 
 const formSchema = z.object({
 	user: z.string(),
@@ -42,6 +48,7 @@ export default function LoginForm() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const { updateToken } = useContext(AuthContext) as AuthContextType;
+	const { updateUser } = useContext(UserContext) as UserContextType;
 
 	useEffect(() => {
 		const from = searchParams.get("from");
@@ -62,11 +69,17 @@ export default function LoginForm() {
 		try {
 			const data = JSON.stringify(userCredentials);
 
-			const response = await axiosInstance.post("/api/v1/auth/login", data);
-
-			const { token } = response.data;
-
+			const tokenResponse = await axiosInstance.post(
+				"/api/v1/auth/login",
+				data
+			);
+			const { token } = tokenResponse.data;
 			updateToken(token);
+
+			const userResponse = await axiosInstance.get(`/api/v1/users`);
+			let userDetails: ApiResponse<IUser> = userResponse.data;
+			console.log(userDetails.payload.username);
+			updateUser(userDetails.payload);
 
 			if (searchParams.get("from")) {
 				router.replace("/events");
@@ -83,7 +96,7 @@ export default function LoginForm() {
 	}
 
 	return (
-		<Suspense fallback={<Loading/>}>
+		<Suspense fallback={<Loading />}>
 			<main className='min-h-screen grid place-items-center'>
 				<div className='justify-self-end ml-4 fixed top-4 left-4'>
 					<Link href='/' className='mr-6 flex' prefetch={false}>
