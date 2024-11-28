@@ -1,30 +1,41 @@
 "use client";
 
 import { AuthContextType } from "@/@types/types";
-import { createContext, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createContext, useState, useEffect, useContext } from "react";
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
+	children,
 }) => {
-  const [token, setToken] = useState<string | null>(null);
+	const [auth, setAuth] = useState<string | null>(null);
 
-  const updateToken = (t: string) => {
-    setToken(t);
-    localStorage.setItem("token", t);
-  };
+	const router = useRouter();
 
-  const deleteToken = () => {
-    setToken(null);
-    localStorage.removeItem("token");
-  };
+	const updateToken = (t: string) => {
+		setAuth(t);
+		localStorage.setItem("token", t);
+	};
 
-  return (
-    <AuthContext.Provider value={{ token, updateToken, deleteToken }}>
-      {children}
-    </AuthContext.Provider>
-  );
+	const deleteToken = () => {
+		setAuth(null);
+		localStorage.removeItem("token");
+		router.push("/login");
+	};
+
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (token) {
+			setAuth(token);
+		}
+	}, []);
+
+	return (
+		<AuthContext.Provider value={{ auth, updateToken, deleteToken }}>
+			{children}
+		</AuthContext.Provider>
+	);
 };
 
 export default AuthProvider;
