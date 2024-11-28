@@ -206,16 +206,18 @@ export default function EventsTable() {
 					</Table>
 				</CardContent>
 				<CardFooter className='flex justify-between items-center'>
-					<div className='text-xs text-muted-foreground'>
-						Showing{" "}
-						<strong>
-							{meta?.limit * meta?.page - meta?.limit + 1}-
-							{meta?.total < meta?.limit * meta?.page
-								? meta?.total
-								: meta?.limit * meta?.page}
-						</strong>{" "}
-						of <strong>{meta?.total}</strong> events
-					</div>
+					{events && (
+						<div className='text-xs text-muted-foreground'>
+							Showing{" "}
+							<strong>
+								{meta?.limit * meta?.page - meta?.limit + 1}-
+								{meta?.total < meta?.limit * meta?.page
+									? meta?.total
+									: meta?.limit * meta?.page}
+							</strong>{" "}
+							of <strong>{meta?.total}</strong> events
+						</div>
+					)}
 					{events && (
 						<PaginationWithLinks
 							page={meta?.page}

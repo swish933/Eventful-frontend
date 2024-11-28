@@ -29,6 +29,7 @@ import paystackLogo from "@/public/paystack logo.svg";
 import { TOAST_DURATION } from "@/lib/constants";
 import Loading from "@/app/loading";
 import { currencyFormat } from "@/lib/utils";
+import withAuth from "@/components/withAuth";
 
 type CarouselProps = { images: string[]; name: string };
 function ImageCarousel({ images, name }: CarouselProps) {
@@ -162,7 +163,7 @@ function PaymentBox({
 	);
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+function Page({ params }: { params: { id: string } }) {
 	const {
 		data: event,
 		isLoading,
@@ -180,10 +181,13 @@ export default function Page({ params }: { params: { id: string } }) {
 
 			<section className='my-10 w-full lg:pl-8 lg:grid gap-28 grid-cols-[2fr_1fr] '>
 				<div className='space-y-8'>
-					<p>{format(event?.startsAt, "eeee, d MMMM, yyyy")}</p>
-					<p className='text-5xl font-semibold'>{event?.name}</p>
-					<p>{event?.description}</p>
-
+					{event && (
+						<>
+							<p>{format(event?.startsAt, "eeee, d MMMM, yyyy")}</p>
+							<p className='text-5xl font-semibold'>{event?.name}</p>
+							<p>{event?.description}</p>
+						</>
+					)}
 					{/* Event host  */}
 					<div className='flex items-center space-x-3 p-4 bg-gray-200 dark:bg-slate-600 rounded-radius'>
 						<>
@@ -215,9 +219,13 @@ export default function Page({ params }: { params: { id: string } }) {
 						<div className='flex space-x-2 items-center'>
 							<CalendarCheck2 className='text-primary w-4 h-4' />
 							<p className='flex items-center space-x-2'>
-								<span>{format(event?.startsAt, "eeee, d MMMM, yyyy")}</span>
-								<span className='text-2xl'>&#183;</span>
-								<span>{format(event?.startsAt, "HH:mm")}</span>
+								{event && (
+									<>
+										<span>{format(event?.startsAt, "eeee, d MMMM, yyyy")}</span>
+										<span className='text-2xl'>&#183;</span>
+										<span>{format(event?.startsAt, "HH:mm")}</span>
+									</>
+								)}{" "}
 							</p>
 						</div>
 					</section>
@@ -263,3 +271,5 @@ export default function Page({ params }: { params: { id: string } }) {
 		</div>
 	);
 }
+
+export default withAuth(Page);

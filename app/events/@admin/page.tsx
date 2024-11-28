@@ -1,5 +1,10 @@
-import EventsTable from "@/components/admin-events-table";
+"use client";
 
-export default function Events() {
+import EventsTable from "@/components/admin-events-table";
+import withAuth from "@/components/withAuth";
+
+function Events() {
 	return <EventsTable />;
 }
+
+export default withAuth(Events);

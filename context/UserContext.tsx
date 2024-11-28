@@ -6,19 +6,23 @@ import { createContext, useState } from "react";
 export const UserContext = createContext<UserContextType | null>(null);
 
 const UserProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
+	children,
 }) => {
-  const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+	const [currentUser, setCurrentUser] = useState<IUser | null>(null);
 
-  const updateUser = (user: IUser) => {
-    setCurrentUser(user);
-  };
+	const updateUser = (user: IUser) => {
+		setCurrentUser(user);
+	};
 
-  return (
-    <UserContext.Provider value={{ currentUser, updateUser }}>
-      {children}
-    </UserContext.Provider>
-  );
+	const clearUser = () => {
+		setCurrentUser(null);
+	};
+
+	return (
+		<UserContext.Provider value={{ currentUser, updateUser, clearUser }}>
+			{children}
+		</UserContext.Provider>
+	);
 };
 
 export default UserProvider;
