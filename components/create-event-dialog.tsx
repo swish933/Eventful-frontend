@@ -233,6 +233,7 @@ export default function CreateEventDialog() {
 											id='description'
 											required
 											maxLength={500}
+											rows={10}
 											placeholder='Description of event here'
 											className='resize-y bg-background dark:bg-background border-input dark:border-input focus-visible:ring-ring dark:focus-visible:ring-ring'
 											{...field}

@@ -153,15 +153,15 @@ export default function EventsTable() {
 										<TableCell className='hidden sm:table-cell'>
 											{event?.images?.length ? (
 												<Image
-													alt={`${event?.name} image`}
+													alt={event && `${event?.name} image`}
 													className='aspect-square rounded-radius object-cover'
 													height='64'
-													src={event?.images[0]}
+													src={event && event?.images[0]}
 													width='64'
 												/>
 											) : (
 												<Image
-													alt={`${event?.name} image`}
+													alt={event && `${event?.name} image`}
 													className='aspect-square rounded-radius object-cover'
 													height='64'
 													width='64'
@@ -170,7 +170,9 @@ export default function EventsTable() {
 											)}
 										</TableCell>
 
-										<TableCell className='font-medium'>{event?.name}</TableCell>
+										<TableCell className='font-medium'>
+											{event && event?.name}
+										</TableCell>
 
 										<TableCell>{currencyFormat(event?.price)}</TableCell>
 
@@ -179,7 +181,7 @@ export default function EventsTable() {
 										</TableCell>
 
 										<TableCell className='hidden md:table-cell'>
-											{format(event?.createdAt, "dd-MM-yyyy HH:mm")}
+											{event && format(event?.createdAt, "dd-MM-yyyy HH:mm")}
 										</TableCell>
 										<TableCell>
 											<DropdownMenu>
