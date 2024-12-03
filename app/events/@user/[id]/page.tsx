@@ -59,8 +59,8 @@ function ImageCarousel({ images, name }: CarouselProps) {
 					</CarouselItem>
 				))}
 			</CarouselContent>
-			<CarouselPrevious />
-			<CarouselNext />
+			<CarouselPrevious className='hidden lg:inline-flex' />
+			<CarouselNext className='hidden lg:inline-flex' />
 		</Carousel>
 	);
 }
