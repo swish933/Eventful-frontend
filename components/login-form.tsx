@@ -78,7 +78,6 @@ export default function LoginForm() {
 
 			const userResponse = await axiosInstance.get(`/api/v1/users`);
 			let userDetails: ApiResponse<IUser> = userResponse.data;
-			console.log(userDetails.payload.username);
 			updateUser(userDetails.payload);
 
 			if (searchParams.get("from")) {
