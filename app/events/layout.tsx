@@ -2,15 +2,11 @@
 
 import React, {
 	useContext,
-	// useLayoutEffect
 } from "react";
 import { UserContext } from "@/context/UserContext";
 import {
-	// ApiResponse,
-	// IUser,
 	UserContextType,
 } from "@/@types/types";
-// import { axiosInstance } from "@/lib/axios";
 
 function Layout({
 	children,
