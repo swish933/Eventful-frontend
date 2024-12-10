@@ -48,7 +48,9 @@ export default function LoginForm() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const { updateToken } = useContext(AuthContext) as AuthContextType;
-	const { updateUser } = useContext(UserContext) as UserContextType;
+	const { updateUser, currentUser } = useContext(
+		UserContext
+	) as UserContextType;
 
 	useEffect(() => {
 		const from = searchParams.get("from");
@@ -80,10 +82,12 @@ export default function LoginForm() {
 			let userDetails: ApiResponse<IUser> = userResponse.data;
 			updateUser(userDetails.payload);
 
+			let route = userDetails.payload.role === "organizer" ? "admin" : "events";
+
 			if (searchParams.get("from")) {
-				router.replace("/events");
+				router.replace(route);
 			} else {
-				router.push("/events");
+				router.push(route);
 			}
 		} catch (error: unknown) {
 			if (error instanceof AxiosError && error.response) {
