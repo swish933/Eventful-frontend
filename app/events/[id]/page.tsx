@@ -183,7 +183,9 @@ function Page({ params }: { params: { id: string } }) {
 				<div className='space-y-8'>
 					{event && (
 						<>
-							<p>{format(event?.startsAt, "eeee, d MMMM, yyyy")}</p>
+							<p className='uppercase tracking-wide font-light'>
+								{format(event?.startsAt, "eeee, d MMMM, yyyy")}
+							</p>
 							<p className='text-5xl font-semibold'>{event?.name}</p>
 							<p>{event?.description}</p>
 						</>

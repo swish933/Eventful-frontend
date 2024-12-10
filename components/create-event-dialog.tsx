@@ -66,16 +66,16 @@ const formSchema = z
 			required_error: "Please select an event type.",
 		}),
 		images: z
-			.instanceof(globalThis.FileList)
+			.custom<FileList>((val) => val instanceof FileList)
 			.transform((files) => Array.from(files))
 			.refine(
-				(images: File[]) =>
+				(images) =>
 					images.length > 1
 						? images.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type))
 						: false,
 				"Only .jpg, .jpeg, .png and .webp files are accepted"
 			)
-			.refine((images: File[]) => {
+			.refine((images) => {
 				if (images.length > 1) {
 					let size = 0;
 					images.forEach((image) => {
@@ -139,7 +139,7 @@ export default function CreateEventDialog() {
 				images,
 			} = eventDetails;
 
-			images.forEach((file) => {
+			images.forEach((file: File) => {
 				formData.append("images", file);
 			});
 
@@ -170,6 +170,7 @@ export default function CreateEventDialog() {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError && error.response) {
 				console.log(error.response.data);
+				// handle duplicate event name
 				toast.error("Something went wrong. Please try again", TOAST_DURATION);
 			} else if (error instanceof Error) {
 				console.error(error.message);

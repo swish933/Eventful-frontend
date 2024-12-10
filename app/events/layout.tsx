@@ -1,25 +1,14 @@
-"use client";
+import AppHeader from "@/components/app-header";
 
-import React, {
-	useContext,
-} from "react";
-import { UserContext } from "@/context/UserContext";
-import {
-	UserContextType,
-} from "@/@types/types";
-
-function Layout({
-	children,
-	user,
-	admin,
-}: {
-	children: React.ReactNode;
-	user: React.ReactNode;
-	admin: React.ReactNode;
-}) {
-	const { currentUser } = useContext(UserContext) as UserContextType;
-
-	return <>{currentUser?.role === "organizer" ? admin : user}</>;
+export default function UserLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <>
+      <AppHeader />
+      <div className="px-4 md:px-6 mt-10 mb-4">{children}</div>
+    </>
+  );
 }
-
-export default Layout;

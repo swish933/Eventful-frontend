@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { File, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -58,15 +58,15 @@ function AllTimeAnalytics({ events }: AnalyticsProps) {
 			<AnalyticsCard description={`Total Events`} data={events} />
 			<AnalyticsCard
 				description={`Total Tickets sold`}
-				data={analytics.tickets}
+				data={analytics?.tickets}
 			/>
 			<AnalyticsCard
 				description={`Total Attendees`}
-				data={analytics.attendees}
+				data={analytics?.attendees}
 			/>
 			<AnalyticsCard
 				description={`Scanned codes`}
-				data={analytics.scannedCodes}
+				data={analytics?.scannedCodes}
 			/>
 		</div>
 	);
@@ -99,17 +99,6 @@ export default function EventsTable() {
 
 			<div className='flex items-center'>
 				<div className='ml-auto flex items-center gap-2'>
-					<Button
-						size='sm'
-						variant='outline'
-						className='h-7 gap-1 bg-secondary border-border dark:border-border dark:bg-secondary hover:bg-secondary/50 dark:hover:bg-secondary/50 text-secondary-foreground dark:text-secondary-foreground ring-ring dark:ring-ring'
-					>
-						<File className='h-3.5 w-3.5' />
-						<span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>
-							Export
-						</span>
-					</Button>
-
 					<CreateEventDialogBtn />
 				</div>
 			</div>
@@ -143,12 +132,12 @@ export default function EventsTable() {
 						</TableHeader>
 
 						<TableBody>
-							{events.length > 0 &&
+							{events &&
 								events?.map((event: IEvent) => (
 									<TableRow
 										key={event?.id}
-										className='cursor-pointer'
-										onClick={() => router.push(`/events/${event?.id}`)}
+										className='cursor-pointer hover:bg-accent dark:hover:bg-accent'
+										onClick={() => router.push(`/admin/${event?.id}`)}
 									>
 										<TableCell className='hidden sm:table-cell'>
 											{event?.images?.length ? (
@@ -226,7 +215,7 @@ export default function EventsTable() {
 							pageSize={meta?.limit}
 							totalCount={meta?.total}
 							pageSizeSelectOptions={{
-								pageSizeOptions: [5, 10, 15, 20, 25, 50],
+								pageSizeOptions: [5, 10, 20, 30, 50],
 								pageSizeSearchParam: "limit",
 							}}
 						/>
