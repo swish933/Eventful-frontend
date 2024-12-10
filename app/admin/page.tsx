@@ -3,8 +3,8 @@
 import EventsTable from "@/components/admin-events-table";
 import withAuth from "@/components/withAuth";
 
-function Events() {
+function Admin() {
 	return <EventsTable />;
 }
 
-export default withAuth(Events);
+export default withAuth(Admin);

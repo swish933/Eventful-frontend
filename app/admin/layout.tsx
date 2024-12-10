@@ -34,16 +34,16 @@ import { AuthContext } from "@/context/AuthContext";
 import { AuthContextType, UserContextType } from "@/@types/types";
 import { grandstander } from "@/app/fonts";
 import { ModeToggle } from "@/components/mode-toggle";
+import { usePathname } from "next/navigation";
 
 export default function AdminLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { currentUser, clearUser } = useContext(
-		UserContext
-	) as UserContextType;
+	const { currentUser, clearUser } = useContext(UserContext) as UserContextType;
 	const { deleteToken } = useContext(AuthContext) as AuthContextType;
+	const pathname = usePathname();
 
 	const logout = () => {
 		deleteToken();
@@ -52,10 +52,10 @@ export default function AdminLayout({
 
 	return (
 		<div className='flex min-h-screen w-full flex-col bg-muted/40'>
-			<aside className='fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex'>
+			<aside className='fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r border-border dark:border-border bg-background sm:flex'>
 				<nav className='flex flex-col items-center gap-4 px-2 py-4'>
 					<Link
-						href='/events'
+						href='/admin'
 						className='group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base'
 					>
 						<span
@@ -69,31 +69,21 @@ export default function AdminLayout({
 						<Tooltip>
 							<TooltipTrigger asChild>
 								<Link
-									href='/events'
+									href='/admin'
 									className='flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'
 								>
 									<Home className='h-5 w-5' />
 									<span className='sr-only'>Dashboard</span>
 								</Link>
 							</TooltipTrigger>
-							<TooltipContent side='right'>Dashboard</TooltipContent>
+							<TooltipContent
+								side='right'
+								className='bg-background dark:bg-background border-border dark:border-border'
+							>
+								Dashboard
+							</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
-
-					{/* <TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<Link
-									href='/events/all'
-									className='flex h-9 w-9 items-center justify-center rounded-lg  text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8'
-								>
-									<Calendar className='h-5 w-5' />
-									<span className='sr-only'>Events</span>
-								</Link>
-							</TooltipTrigger>
-							<TooltipContent side='right'>Events</TooltipContent>
-						</Tooltip>
-					</TooltipProvider> */}
 				</nav>
 				<nav className='mt-auto flex flex-col items-center gap-4 px-2 py-4'>
 					{/* <TooltipProvider>
@@ -116,15 +106,22 @@ export default function AdminLayout({
 				<header className='sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6'>
 					<Sheet>
 						<SheetTrigger asChild>
-							<Button size='icon' variant='outline' className='sm:hidden'>
+							<Button
+								size='icon'
+								variant='outline'
+								className='sm:hidden bg-background dark:bg-background border-border dark:border-border hover:bg-accent hover:dark:bg-accent'
+							>
 								<PanelLeft className='h-5 w-5' />
 								<span className='sr-only'>Toggle Menu</span>
 							</Button>
 						</SheetTrigger>
-						<SheetContent side='left' className='sm:max-w-xs'>
+						<SheetContent
+							side='left'
+							className='sm:max-w-xs bg-background dark:bg-background border-border dark:border-border'
+						>
 							<nav className='grid gap-6 text-lg font-medium'>
 								<Link
-									href='/events'
+									href='/admin'
 									className='group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base'
 								>
 									<span
@@ -135,7 +132,7 @@ export default function AdminLayout({
 									<span className='sr-only'>Eventful</span>
 								</Link>
 								<Link
-									href='/events'
+									href='/admin'
 									className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
 								>
 									<Home className='h-5 w-5' />
@@ -148,13 +145,19 @@ export default function AdminLayout({
 						<BreadcrumbList>
 							<BreadcrumbItem>
 								<BreadcrumbLink asChild>
-									<Link href='/events'>Dashboard</Link>
+									<Link href='/admin'>Dashboard</Link>
 								</BreadcrumbLink>
 							</BreadcrumbItem>
 							<BreadcrumbSeparator />
-							<BreadcrumbItem>
-								<BreadcrumbPage>Home</BreadcrumbPage>
-							</BreadcrumbItem>
+							{pathname === "/admin" ? (
+								<BreadcrumbItem>
+									<BreadcrumbPage>Home</BreadcrumbPage>
+								</BreadcrumbItem>
+							) : (
+								<BreadcrumbItem>
+									<BreadcrumbPage>Event</BreadcrumbPage>
+								</BreadcrumbItem>
+							)}
 						</BreadcrumbList>
 					</Breadcrumb>
 					<div className='relative ml-auto flex-1 md:grow-0'>
@@ -191,7 +194,7 @@ export default function AdminLayout({
 							className='bg-popover dark:bg-popover border-border dark:border-border'
 						>
 							<DropdownMenuLabel>My Account</DropdownMenuLabel>
-							<DropdownMenuSeparator />
+							<DropdownMenuSeparator className='bg-border dark:bg-border' />
 							<DropdownMenuItem
 								className='focus:bg-accent dark:focus:bg-accent'
 								onClick={() => logout()}
