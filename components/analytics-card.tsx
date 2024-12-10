@@ -1,9 +1,4 @@
-"use client";
-
-import React from "react";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 
 type Props = {
 	description: string;
