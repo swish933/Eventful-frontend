@@ -12,10 +12,12 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const updateUser = (user: IUser) => {
 		setCurrentUser(user);
+		localStorage.setItem("role", user.role);
 	};
 
 	const clearUser = () => {
 		setCurrentUser(null);
+		localStorage.removeItem("role");
 	};
 
 	return (
