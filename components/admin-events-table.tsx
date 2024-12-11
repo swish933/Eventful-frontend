@@ -81,6 +81,8 @@ export default function EventsTable() {
 	const { data, isLoading } = useEvents(page, limit);
 	const { events, meta } = data;
 
+	// console.log(events);
+
 	const router = useRouter();
 
 	if (isLoading) {
@@ -120,7 +122,7 @@ export default function EventsTable() {
 								<TableHead>Name</TableHead>
 								<TableHead>Price</TableHead>
 								<TableHead className='hidden md:table-cell'>
-									Total Sales
+									Ticket sold
 								</TableHead>
 								<TableHead className='hidden md:table-cell'>
 									Created at
@@ -166,7 +168,7 @@ export default function EventsTable() {
 										<TableCell>{currencyFormat(event?.price)}</TableCell>
 
 										<TableCell className='hidden md:table-cell'>
-											{event?.customers?.length}
+											{event?.ticketsSold}
 										</TableCell>
 
 										<TableCell className='hidden md:table-cell'>
