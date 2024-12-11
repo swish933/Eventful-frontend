@@ -122,7 +122,7 @@ export default function EventsTable() {
 								<TableHead>Name</TableHead>
 								<TableHead>Price</TableHead>
 								<TableHead className='hidden md:table-cell'>
-									Ticket sold
+									Tickets sold
 								</TableHead>
 								<TableHead className='hidden md:table-cell'>
 									Created at
