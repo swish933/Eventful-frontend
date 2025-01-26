@@ -142,7 +142,7 @@ export default function EventsTable() {
 										onClick={() => router.push(`/admin/${event?.id}`)}
 									>
 										<TableCell className='hidden sm:table-cell'>
-											{event?.images?.length ? (
+											{event?.images?.length > 0 ? (
 												<Image
 													alt={event && `${event?.name} image`}
 													className='aspect-square rounded-radius object-cover'
@@ -156,7 +156,7 @@ export default function EventsTable() {
 													className='aspect-square rounded-radius object-cover'
 													height='64'
 													width='64'
-													src='https://placehold.co/64x64/webp?font=raleway'
+													src='/placeholder.jpg'
 												/>
 											)}
 										</TableCell>
