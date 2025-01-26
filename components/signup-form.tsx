@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { useRouter } from "next/navigation";
@@ -35,6 +36,7 @@ import {
 	MAX_FILE_SIZE,
 	TOAST_DURATION,
 } from "@/lib/constants";
+import Spinner from "@/components/spinner";
 import { toast } from "sonner";
 
 const formSchema = z
@@ -84,6 +86,7 @@ const formSchema = z
 
 export default function RegisterForm() {
 	const router = useRouter();
+	const [loading, setLoading] = useState(false);
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -102,6 +105,7 @@ export default function RegisterForm() {
 
 	async function onSubmit(userCredentials: z.infer<typeof formSchema>) {
 		try {
+			setLoading(!loading);
 			const formData = new FormData();
 			const {
 				email,
@@ -129,8 +133,11 @@ export default function RegisterForm() {
 				},
 			});
 
+			setLoading(false);
+
 			router.push("/login?from=registration");
 		} catch (error: unknown) {
+			setLoading(false);
 			if (error instanceof AxiosError && error.response) {
 				console.log(error.response.data);
 				toast.error(error.response.data.message, TOAST_DURATION);
@@ -335,9 +342,9 @@ export default function RegisterForm() {
 								<Button
 									disabled={form.formState.isSubmitting}
 									type='submit'
-									className='w-full bg-primary dark:bg-primary text-primary-foreground dark:text-primary-foreground hover:bg-primary/75 dark:hover:bg-primary/75 focus-visible:ring-ring dark:focus-visible:ring-ring'
+									className='w-full bg-primary dark:bg-primary text-primary-foreground dark:text-primary-foreground disabled:bg-primary/30 hover:bg-primary/75 dark:hover:bg-primary/75 focus-visible:ring-ring dark:focus-visible:ring-ring'
 								>
-									Sign up
+									{loading ? <Spinner /> : "Sign up"}
 								</Button>
 							</div>
 						</form>
