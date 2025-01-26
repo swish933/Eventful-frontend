@@ -74,7 +74,7 @@ const formSchema = z
 					images.length > 1
 						? images.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type))
 						: false,
-				"Only .jpg, .jpeg, .png and .webp files are accepted"
+				"Only .jpg, .jpeg, .png and .webp files are accepted & add more than one image"
 			)
 			.refine((images) => {
 				if (images.length > 1) {
