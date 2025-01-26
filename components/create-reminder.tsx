@@ -37,7 +37,8 @@ import { AxiosError, AxiosResponse } from "axios";
 import { TimePicker } from "@/components/time-picker";
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import Spinner from "@/components/spinner";
 
 type ReminderProps = {
 	event: string;
@@ -51,6 +52,7 @@ const formSchema = z.object({
 
 export default function CreateReminderDialog({ event }: ReminderProps) {
 	const ref = useRef<HTMLButtonElement>(null);
+	const [loading, setLoading] = useState(false);
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -60,17 +62,20 @@ export default function CreateReminderDialog({ event }: ReminderProps) {
 
 	async function onSubmit(reminder: z.infer<typeof formSchema>) {
 		try {
+			setLoading(!loading);
 			const { time } = reminder;
 
 			const response: AxiosResponse = await axiosInstance.post(
 				`/api/v1/reminders`,
 				{ event, time }
 			);
+			setLoading(false);
 
 			ref.current?.click();
 			toast.success(response.data.message, TOAST_DURATION);
 			form.reset();
 		} catch (error: unknown) {
+			setLoading(false);
 			if (error instanceof AxiosError && error.response) {
 				toast.error("Something went wrong. Please try again", TOAST_DURATION);
 			} else if (error instanceof Error) {
@@ -159,7 +164,7 @@ export default function CreateReminderDialog({ event }: ReminderProps) {
 							type='submit'
 							className='bg-primary dark:bg-primary text-primary-foreground disabled:bg-primary/50 dark:text-primary-foreground hover:bg-primary/75 dark:hover:bg-primary/75 focus-visible:ring-ring dark:focus-visible:ring-ring capitalize'
 						>
-							Add reminder for event
+							{loading ? <Spinner /> : "Add reminder for event"}
 						</Button>
 					</form>
 				</Form>

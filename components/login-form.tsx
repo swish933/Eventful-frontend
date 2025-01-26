@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { AxiosError } from "axios";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -37,6 +37,7 @@ import {
 } from "@/@types/types";
 import { Suspense } from "react";
 import Loading from "@/app/loading";
+import Spinner from "@/components/spinner";
 import { UserContext } from "@/context/UserContext";
 
 const formSchema = z.object({
@@ -46,6 +47,7 @@ const formSchema = z.object({
 
 export default function LoginForm() {
 	const router = useRouter();
+	const [loading, setLoading] = useState(false);
 	const searchParams = useSearchParams();
 	const { updateToken } = useContext(AuthContext) as AuthContextType;
 	const { updateUser, currentUser } = useContext(
@@ -69,6 +71,7 @@ export default function LoginForm() {
 
 	async function onSubmit(userCredentials: z.infer<typeof formSchema>) {
 		try {
+			setLoading(!loading);
 			const data = JSON.stringify(userCredentials);
 
 			const tokenResponse = await axiosInstance.post(
@@ -84,12 +87,15 @@ export default function LoginForm() {
 
 			let route = userDetails.payload.role === "organizer" ? "admin" : "events";
 
+			setLoading(false);
+
 			if (searchParams.get("from")) {
 				router.replace(route);
 			} else {
 				router.push(route);
 			}
 		} catch (error: unknown) {
+			setLoading(false);
 			if (error instanceof AxiosError && error.response) {
 				toast.error(error.response.data.message, { duration: 2500 });
 			} else if (error instanceof Error) {
@@ -172,7 +178,7 @@ export default function LoginForm() {
 									type='submit'
 									className='w-full bg-primary dark:bg-primary text-primary-foreground disabled:bg-primary/30 dark:text-primary-foreground hover:bg-primary/75 dark:hover:bg-primary/75 focus-visible:ring-ring dark:focus-visible:ring-ring '
 								>
-									Login
+									{loading ? <Spinner /> : "Login"}
 								</Button>
 							</form>
 						</Form>

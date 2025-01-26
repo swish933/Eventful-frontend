@@ -30,6 +30,7 @@ import { TOAST_DURATION } from "@/lib/constants";
 import Loading from "@/app/loading";
 import { currencyFormat } from "@/lib/utils";
 import withAuth from "@/components/withAuth";
+import Spinner from "@/components/spinner";
 
 type CarouselProps = { images: string[]; name: string };
 function ImageCarousel({ images, name }: CarouselProps) {
@@ -80,6 +81,7 @@ function PaymentBox({
 	className,
 }: PaymentBoxProps) {
 	const router = useRouter();
+	const [loading, setLoading] = useState(false);
 
 	function modifyTicketCount(action = "add") {
 		switch (action) {
@@ -105,6 +107,7 @@ function PaymentBox({
 		};
 
 		try {
+			setLoading(!loading);
 			let data = JSON.stringify(transactionInfo);
 
 			const response = await axiosInstance.post(
@@ -112,9 +115,12 @@ function PaymentBox({
 				data
 			);
 
+			setLoading(false);
+
 			//Navigate to authorization_url to complete payment with paystack
 			router.push(response.data.payload.data.authorization_url);
 		} catch (error) {
+			setLoading(false);
 			if (error instanceof AxiosError && error.response) {
 				console.log(error.response.data);
 				toast.error("Something went wrong. Please try again", TOAST_DURATION);
@@ -152,12 +158,19 @@ function PaymentBox({
 			</p>
 			<Button
 				onClick={() => initiateTransaction()}
-				className='bg-primary dark:bg-primary text-white'
+				disabled={loading}
+				className='bg-primary dark:bg-primary text-white disabled:bg-primary/30'
 			>
-				Pay with{" "}
-				<span className='ml-2'>
-					<Image src={paystackLogo} alt='paystack'></Image>
-				</span>
+				{loading ? (
+					<Spinner />
+				) : (
+					<>
+						<span>{"Pay with "}</span>
+						<span className='ml-2'>
+							<Image src={paystackLogo} alt='paystack'></Image>
+						</span>
+					</>
+				)}
 			</Button>
 		</div>
 	);

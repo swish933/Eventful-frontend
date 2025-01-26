@@ -41,9 +41,10 @@ import { AxiosError, AxiosResponse } from "axios";
 import { TimePicker } from "@/components/time-picker";
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useSWRConfig } from "swr";
 import { useSearchParams } from "next/navigation";
+import Spinner from "@/components/spinner";
 
 const formSchema = z
 	.object({
@@ -100,6 +101,7 @@ const formSchema = z
 
 export default function CreateEventDialog() {
 	const ref = useRef<HTMLButtonElement>(null);
+	const [loading, setLoading] = useState(false);
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -127,6 +129,7 @@ export default function CreateEventDialog() {
 	async function onSubmit(eventDetails: z.infer<typeof formSchema>) {
 		const formData = new FormData();
 		try {
+			setLoading(!loading);
 			const {
 				name,
 				description,
@@ -162,12 +165,16 @@ export default function CreateEventDialog() {
 				}
 			);
 
+			setLoading(false);
+
 			ref.current?.click();
 			toast.success(response.data.message, TOAST_DURATION);
 			form.reset();
 
 			mutate(`/api/v1/events/myevents/?page=${page}&limit=${limit}`);
 		} catch (error: unknown) {
+			setLoading(false);
+
 			if (error instanceof AxiosError && error.response) {
 				console.log(error.response.data);
 				// handle duplicate event name
@@ -507,7 +514,7 @@ export default function CreateEventDialog() {
 							type='submit'
 							className='bg-primary dark:bg-primary text-primary-foreground disabled:bg-primary/50 dark:text-primary-foreground hover:bg-primary/75 dark:hover:bg-primary/75 focus-visible:ring-ring dark:focus-visible:ring-ring capitalize'
 						>
-							Create event
+							{loading ? <Spinner /> : "Create event"}
 						</Button>
 					</form>
 				</Form>
