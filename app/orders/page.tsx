@@ -25,49 +25,55 @@ import withAuth from "@/components/withAuth";
 function OrderCard({ order }: { order: IOrder }) {
 	return (
 		<Card className='bg-background dark:bg-background border-border dark:border-border overflow-hidden max-w-3xl rounded-radius relative'>
-			<Link key={order.id} href={`/orders/${order.id}`}>
+			<Link key={order?.id} href={`/orders/${order?.id}`}>
 				<CardContent className='grid grid-cols-1 sm:grid-cols-[1fr,_2fr] p-0 gap-x-4 gap-y-4 sm:gap-y-8'>
 					<div className='relative w-1/2 mx-auto sm:mx-0 aspect-square sm:aspect-auto sm:w-full sm:h-auto'>
-						<Image fill src={order.event.images[0]} alt={order.event.name} />
+						<Image
+							fill
+							src={order?.event?.images[0]}
+							alt={order?.event?.name}
+						/>
 					</div>
 					<div className='p-2	flex flex-col gap-y-2'>
 						<p className='flex items-center space-x-2'>
 							<CalendarCheck2 className=' text-primary w-4 h-4' />
-							<span>{order.event.name}</span>
+							<span>{order?.event?.name}</span>
 						</p>
 						<p className='flex items-center space-x-2'>
 							<Clock4 className='text-primary w-4 h-4' />
-							<span>{format(order.event.startsAt, "eeee, d MMMM, yyyy")}</span>
+							<span>
+								{format(order?.event?.startsAt, "eeee, d MMMM, yyyy")}
+							</span>
 							<span className='text-2xl'>&#183;</span>
-							<span>{format(order.event.startsAt, "HH:mm")}</span>
+							<span>{format(order?.event?.startsAt, "HH:mm")}</span>
 						</p>{" "}
 						<p className='flex items-center space-x-2'>
-							{order.event.eventType === "physical" ? (
+							{order?.event?.eventType === "physical" ? (
 								<MapPinIcon className='text-primary w-4 h-4' />
 							) : (
 								<LinkIcon className='text-primary w-4 h-4' />
 							)}
 
-							<span>{order.event.location}</span>
+							<span>{order?.event?.location}</span>
 						</p>
 						<p className='flex items-center space-x-2'>
 							<CreditCard className='text-primary w-4 h-4' />
-							<span>Amount paid: {currencyFormat(order.amount)}</span>
+							<span>Amount paid: {currencyFormat(order?.amount)}</span>
 						</p>
 						<div className='flex justify-between items-center'>
 							<p className='flex items-center space-x-2'>
 								<TicketCheck className='text-primary w-4 h-4' />
-								<span>Permits: {order.amount / order.event.price}</span>
+								<span>Permits: {order?.amount / order?.event?.price}</span>
 							</p>
 							<Badge className='uppercase bg-primary dark:bg-primary'>
-								{order.status === "successful" ? "Paid" : "Pending"}
+								{order?.status === "successful" ? "Paid" : "Pending"}
 							</Badge>
 						</div>
 					</div>
 				</CardContent>
 			</Link>
 			{order.event.startsAt > new Date().toISOString() && (
-				<CreateReminderDialog event={order.event.id} />
+				<CreateReminderDialog event={order?.event?.id} />
 			)}
 		</Card>
 	);
@@ -79,8 +85,12 @@ function Page() {
 	const page = parseInt(searchParams.get("page") || "1");
 	const limit = parseInt(searchParams.get("limit") || "10");
 
-	const { data, isLoading } = useOrders(page, limit);
+	const { data, isLoading, error } = useOrders(page, limit);
 	const { orders, meta } = data;
+
+	if (error) {
+		console.error(error);
+	}
 
 	if (isLoading) {
 		return <Loading />;
@@ -90,7 +100,7 @@ function Page() {
 		<main className='flex flex-col space-y-8'>
 			{orders?.length > 0 ? (
 				orders?.map((order: IOrder) => (
-					<OrderCard key={order.id} order={order} />
+					<OrderCard key={order?.id} order={order} />
 				))
 			) : (
 				<div className='mx-auto min-h-[70vh] flex items-center text-4xl'>
