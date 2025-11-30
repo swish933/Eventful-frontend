@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import UserProvider from "@/context/UserContext";
 import AuthProvider from "@/context/AuthContext";
 import { GeistSans } from "geist/font/sans";
+import { ibmPlexSans } from "./fonts";
 
 export const metadata: Metadata = {
 	title: "Eventful",
@@ -22,7 +23,7 @@ export default function RootLayout({
 			<body
 				className={cn(
 					"min-h-screen bg-background text-foreground dark:bg-background dark:text-foreground antialiased",
-					`${GeistSans.className}`
+					`${ibmPlexSans.className}`
 				)}
 			>
 				<AuthProvider>
